@@ -1,0 +1,554 @@
+﻿import React, { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  ArrowRight, ArrowUpRight, Award, BookOpen, CheckCircle2, Code2, Database,
+  Download, Github, Globe2, GraduationCap, Languages, Linkedin, Mail, Menu,
+  Monitor, Network, Server, Target, Trophy, X, Zap, Sparkles, Terminal,
+  ExternalLink, Layers3, Cpu, CircleDot, Send, ChevronRight
+} from 'lucide-react';
+import './styles.css';
+
+const content = {
+  en: {
+    nav: [['/','Home'],['/about','About'],['/education','Education'],['/skills','Skills'],['/certificates','Certificates'],['/projects','Projects'],['/achievements','Achievements'],['/resume','Resume'],['/contact','Contact']],
+    role: 'Information Technology Student',
+    heroKicker: 'PERSONAL DIGITAL LABORATORY Ãƒâ€šÃ‚Â· IT',
+    heroTitle: 'Building my future through Information Technology.',
+    heroText: 'I explore practical computing, programming, networking, databases, web technologies and digital problem solving ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â learning by building and improving.',
+    explore: 'Explore Projects', resume: 'View Resume', about: 'About Me',
+    stats: [['90%','Three-year average'],['92%','Highest grade'],['2014ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“2026','Academic journey'],['IT','Future direction']],
+    chips: ['Python','Networking','Databases','Web Development'],
+    aboutTitle: 'A practical learner with a clear direction.',
+    aboutText: 'My interest in Information Technology grew through school and hands-on computer learning. I have developed my skills through independent study, online courses and practical projects, especially where technology can solve real problems.',
+    focusTitle: 'What I focus on',
+    focus: ['Computer systems & operating systems','Networking and IT infrastructure','Python and practical programming','Web technologies and databases','Digital productivity and problem solving'],
+    eduTitle: 'Education', eduSub: 'From my school years to my planned university journey.', performance: 'Academic performance',
+    journey: [['2014','Education begins','The start of my long academic journey.'],['2024','Grade 10','83% academic result.'],['2025','Grade 11','92% academic result.'],['2026','Grade 12 completion','Three-year average: 90%.'],['Next','BachelorÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s in Information Technology','Planned university direction.'],['Future','MasterÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s degree','Advanced academic and professional development.']],
+    highTitle: 'Academic highlights', high: ['Three-year average of 90%','Highest recorded grade: 92%','Top student in class','Four first-rank school certificates','Recognition for helping classmates learn computer skills'],
+    skillsTitle: 'IT Skills', skillsSub: 'A growing technical toolkit built through study and projects.',
+    skills: [['Computer Systems','Strong','Operating systems, computer basics and troubleshooting',Monitor,'92%'],['Networking','Intermediate','Network concepts, monitoring and practical learning',Network,'72%'],['Python','Intermediate','Programming fundamentals, scripts and application logic',Code2,'72%'],['Web Technologies','Intermediate','Flask, React, Vite and responsive web development',Server,'72%'],['Databases','Intermediate','SQL concepts and structured information management',Database,'72%'],['Office & Productivity','Advanced','Microsoft Office, documentation and digital workflows',BookOpen,'92%']],
+    certTitle: 'Certificates', certSub: 'Courses and credentials that support my IT learning.',
+    certs: [
+  ['CS50x','Harvard / CS50','Introduction to Computer Science','https://cs50.harvard.edu/certificates/aeb8b52a-2cec-4b32-82d1-6e59e5bc853e','/assets/certificates/CS50X.jpg','/assets/certificates/CS50X.pdf'],
+  ['CS50P','Harvard / CS50','Introduction to Programming with Python','https://cs50.harvard.edu/certificates/590f0885-92c1-4263-9f8c-feb76327671a','/assets/certificates/CS50P.jpg','/assets/certificates/CS50P.pdf'],
+  ['CS50 SQL','Harvard / CS50','SQL and database fundamentals'],
+  ['ICDL','Digital Skills','Computer and productivity skills'],
+  ['English Certificates','Academic','English language learning and development'],
+  ['School Recognition','Qabilbay School','Academic and technology-related recognition']
+],
+    projTitle: 'Projects', projSub: 'Practical IT projects built to demonstrate what I can learn and apply.',
+    projects: [['Karimi IT Help Desk System','IT Support Ãƒâ€šÃ‚Â· Flask Ãƒâ€šÃ‚Â· SQLAlchemy','A web-based support system for creating, managing and tracking technical support tickets.','https://github.com/hashmat-cyber/Karimi-IT-Help-Desk-System','https://karimi-it-help-desk-system.onrender.com/'],['Karimi Network Monitoring Dashboard','Networking Ãƒâ€šÃ‚Â· Flask Ãƒâ€šÃ‚Â· Python','A monitoring dashboard for devices, status checks, alerts, scanning and network reporting.','https://github.com/hashmat-cyber/Karimi-Network-Monitoring-Dashboard','https://karimi-network-monitoring-dashboard.onrender.com'],['Karimi Student Information Database','Database Ãƒâ€šÃ‚Â· Python Ãƒâ€šÃ‚Â· Web','A structured student information project designed to demonstrate database organization and practical information management.','https://github.com/hashmat-cyber/Karimi-Student-Information-Database','https://karimi-student-information-database.onrender.com']],
+    achTitle: 'Achievements', achSub: 'Academic, technical and personal milestones.', ach: ['First Rank — Grade 11','Successful Completion of Grade 12 First Four-Month Examination'],
+    goalsTitle: 'Academic & Career Goals', goalsSub: 'A simple roadmap with long-term direction.', goals: [['01','BachelorÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s in Information Technology','Build strong foundations in systems, networking, databases, software and modern digital technologies.'],['02','Professional Development','Strengthen my practical skills through projects, certifications, internships and continuous learning.'],['03','MasterÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s Degree','Continue advanced study and develop deeper expertise in a future IT specialization.']],
+    resumeTitle: 'Resume', resumeSub: 'A concise view of my academic direction, technical foundation and practical work.',
+    contactTitle: 'LetÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s build something meaningful.', contactText: 'For scholarship, academic, internship or technology opportunities, you can reach me through my professional profiles.', email: 'Email', github: 'GitHub', linkedin: 'LinkedIn', send: 'Send message', nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePh: 'Your name', emailPh: 'you@example.com', messagePh: 'Tell me about the opportunityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦',
+    footer: 'Sayed Hashmat Karimi Ãƒâ€šÃ‚Â· Information Technology Student', back: 'Back to top', language: 'Dari', menu: 'Menu'
+  },
+  fa: {
+    nav: [['/','ÃƒËœÃ‚Â®ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â¡'],['/about','ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â '],['/education','ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª'],['/skills','Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§'],['/certificates','ÃƒËœÃ‚Â³ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™Ãƒâ„¢Ã‚ÂÃƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§'],['/projects','Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§'],['/achievements','ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§'],['/resume','ÃƒËœÃ‚Â±ÃƒËœÃ‚Â²Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡'],['/contact','ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚Â³']],
+    role: 'Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ„¢Ã¢â‚¬Å¾ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™', heroKicker: 'Ãƒâ„¢Ã‚Â¾Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒâ„¢Ã‚ÂÃƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â´ÃƒËœÃ‚Â®ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™ Ãƒâ€šÃ‚Â· ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™',
+    heroTitle: 'ÃƒËœÃ‚Â¢Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â²Ãƒâ„¢Ã¢â‚¬Â¦.', heroText: 'Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±ÃƒËœÃ…â€™ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ…â€™ ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ…â€™ ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ…â€™ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¨ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â­Ãƒâ„¢Ã¢â‚¬Å¾ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â´ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â§ÃƒËœÃ‚Â± Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â¦ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â®ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¦.',
+    explore: 'ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§', resume: 'ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â±ÃƒËœÃ‚Â²Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡', about: 'ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â ', stats: [['90Ãƒâ„¢Ã‚Âª','Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â³Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾'],['92Ãƒâ„¢Ã‚Âª','ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡'],['2014ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“2026','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™'],['IT','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚Â¢Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡']], chips: ['Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â ','ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡','ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³','ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¨'],
+    aboutTitle: 'Ãƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â© Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â´Ãƒâ„¢Ã¢â‚¬Â .', aboutText: 'ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¡Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â² Ãƒâ„¢Ã¢â‚¬Â¦ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚ÂªÃƒËœÃ‚Â¨ Ãƒâ„¢Ã‹â€  ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â§ÃƒËœÃ‚Â± ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â± ÃƒËœÃ‚Â¢ÃƒËœÃ‚ÂºÃƒËœÃ‚Â§ÃƒËœÃ‚Â² ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯. Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â² ÃƒËœÃ‚Â·ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¡ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â·ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â´ÃƒËœÃ‚Â®ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™ÃƒËœÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â³ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¢Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ¢â‚¬Âº ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â®ÃƒËœÃ‚ÂµÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Âµ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â± ÃƒËœÃ‚Â¬ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â´ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¡ÃƒËœÃ‚Â¹Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§ ÃƒËœÃ‚Â­Ãƒâ„¢Ã¢â‚¬Å¾ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯.', focusTitle: 'ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â±ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â² Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â ', focus: ['ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â± Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â¹ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§','ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â²Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â®ÃƒËœÃ‚Âª IT','Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™','ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¨ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§','ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â­Ãƒâ„¢Ã¢â‚¬Å¾ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â´ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª'],
+    eduTitle: 'ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª', eduSub: 'ÃƒËœÃ‚Â§ÃƒËœÃ‚Â² ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚ÂªÃƒËœÃ‚Â¨ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â²Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â´ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â .', performance: 'ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¯ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™', journey: [['2014','ÃƒËœÃ‚Â¢ÃƒËœÃ‚ÂºÃƒËœÃ‚Â§ÃƒËœÃ‚Â² ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾','ÃƒËœÃ‚Â´ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¹ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚Â·Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â .'],['2024','ÃƒËœÃ‚ÂµÃƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‚Â Ãƒâ€ºÃ‚Â±Ãƒâ€ºÃ‚Â°','Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ€ºÃ‚Â¸Ãƒâ€ºÃ‚Â³Ãƒâ„¢Ã‚Âª.'],['2025','ÃƒËœÃ‚ÂµÃƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‚Â Ãƒâ€ºÃ‚Â±Ãƒâ€ºÃ‚Â±','Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ€ºÃ‚Â¹Ãƒâ€ºÃ‚Â²Ãƒâ„¢Ã‚Âª.'],['2026','ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾ ÃƒËœÃ‚ÂµÃƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‚Â Ãƒâ€ºÃ‚Â±Ãƒâ€ºÃ‚Â²','Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â³Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾: Ãƒâ€ºÃ‚Â¹Ãƒâ€ºÃ‚Â°Ãƒâ„¢Ã‚Âª.'],['ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â¹ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¹','Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â³ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â²Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â´ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ€ºÃ…â€™.'],['ÃƒËœÃ‚Â¢Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™','ÃƒËœÃ‚Â±ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯ Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â´ÃƒËœÃ‚Â±Ãƒâ„¢Ã‚ÂÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™.']],
+    highTitle: 'Ãƒâ„¢Ã¢â‚¬Â ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¬ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™', high: ['Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â³Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾ Ãƒâ€ºÃ‚Â¹Ãƒâ€ºÃ‚Â°Ãƒâ„¢Ã‚Âª','ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â«ÃƒËœÃ‚Â¨ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡: Ãƒâ€ºÃ‚Â¹Ãƒâ€ºÃ‚Â²Ãƒâ„¢Ã‚Âª','ÃƒËœÃ‚Â´ÃƒËœÃ‚Â§ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¯ ÃƒËœÃ‚Â§Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Å¾ ÃƒËœÃ‚ÂµÃƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‚Â','ÃƒÅ¡Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â± ÃƒËœÃ‚Â³ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™Ãƒâ„¢Ã‚ÂÃƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Âª Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¡ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚Â§Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Å¾ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚ÂªÃƒËœÃ‚Â¨','ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Å¡ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦ÃƒÅ¡Ã‚Â© ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ„¢Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚ÂµÃƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‚ÂÃƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â± Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±'],
+    skillsTitle: 'Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ IT', skillsSub: 'Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¬Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â®Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â² ÃƒËœÃ‚Â·ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¡ ÃƒËœÃ‚Â¢Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â²ÃƒËœÃ‚Â´ Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â± ÃƒËœÃ‚Â­ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â³ÃƒËœÃ‚Âª.', skills: [['ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±','Ãƒâ„¢Ã¢â‚¬Å¡Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™','ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â¹ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â± Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â¹Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¨ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™',Monitor,'92%'],['ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â·','Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚ÂÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒÅ¡Ã‚Â¯ Ãƒâ„¢Ã‹â€  Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™',Network,'72%'],['Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â ','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â·','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ…â€™ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â³ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Âª Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â·Ãƒâ„¢Ã¢â‚¬Å¡ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡',Code2,'72%'],['ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¨','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â·','FlaskÃƒËœÃ…â€™ ReactÃƒËœÃ…â€™ Vite Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¨ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â§ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â´ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§',Server,'72%'],['ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â·','Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã‚ÂÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦ SQL Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Âª Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¸Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â·Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¹ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª',Database,'72%'],['ÃƒËœÃ‚Â¢Ãƒâ„¢Ã‚ÂÃƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™','Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â´ÃƒËœÃ‚Â±Ãƒâ„¢Ã‚ÂÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¡','Microsoft OfficeÃƒËœÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â²Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â¬ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™',BookOpen,'92%']],
+    certTitle: 'ÃƒËœÃ‚Â³ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™Ãƒâ„¢Ã‚ÂÃƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§', certSub: 'ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â³ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ IT Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§ Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â´ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯.', certs: [
+  ['CS50x','Harvard / CS50','Introduction to Computer Science','https://cs50.harvard.edu/certificates/aeb8b52a-2cec-4b32-82d1-6e59e5bc853e','/assets/certificates/CS50X.jpg','/assets/certificates/CS50X.pdf'],
+  ['CS50P','Harvard / CS50','Introduction to Programming with Python','https://cs50.harvard.edu/certificates/590f0885-92c1-4263-9f8c-feb76327671a','/assets/certificates/CS50P.jpg','/assets/certificates/CS50P.pdf'],
+  ['CS50 SQL','Harvard / CS50','SQL and database fundamentals'],
+  ['ICDL','Digital Skills','Computer and productivity skills'],
+  ['English Certificates','Academic','English language learning and development'],
+  ['School Recognition','Qabilbay School','Academic and technology-related recognition']
+],
+    projTitle: 'Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§', projSub: 'Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ IT ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â´ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â  ÃƒÅ¡Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â²Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â±Ãƒâ„¢Ã‚ÂÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¬ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§ ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦.', projects: [['Karimi IT Help Desk System','Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â´ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ IT Ãƒâ€šÃ‚Â· Flask Ãƒâ€šÃ‚Â· SQLAlchemy','ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¨ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ÃƒËœÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Âª Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â´ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â®Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™.','https://github.com/hashmat-cyber/Karimi-IT-Help-Desk-System','https://karimi-it-help-desk-system.onrender.com/'],['Karimi Network Monitoring Dashboard','ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ€šÃ‚Â· Flask Ãƒâ€šÃ‚Â· Python','ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¯ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒÅ¡Ã‚Â¯ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ…â€™ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â±ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â¶ÃƒËœÃ‚Â¹Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ…â€™ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â³ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã‹â€  ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â²ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚Â´ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡.','https://github.com/hashmat-cyber/Karimi-Network-Monitoring-Dashboard','https://karimi-network-monitoring-dashboard.onrender.com'],['Karimi Student Information Database','ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ Ãƒâ€šÃ‚Â· Python Ãƒâ€šÃ‚Â· Web','Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â·Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¹ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª ÃƒËœÃ‚Â´ÃƒËœÃ‚Â§ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â´ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â²Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Âª ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â·Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¹ÃƒËœÃ‚Â§ÃƒËœÃ‚Âª.','https://github.com/hashmat-cyber/Karimi-Student-Information-Database','https://karimi-student-information-database.onrender.com']],
+    achTitle: 'ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§', achSub: 'Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Å¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â· Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ÃƒËœÃ…â€™ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â®Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â´ÃƒËœÃ‚Â®ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™.', ach: ['مقام اول — صنف یازدهم','تکمیل موفقانه امتحان چهارماهه اول صنف دوازدهم'],
+    goalsTitle: 'ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã‚Â ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€  Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™', goalsSub: 'Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Å¡ÃƒËœÃ‚Â´Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚Â¢Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡.', goals: [['01','Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â³ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™','ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â®ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â  Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã¢â‚¬Å¡Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â± ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ…â€™ ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ…â€™ ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³ÃƒËœÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã‚ÂÃƒËœÃ‚Â²ÃƒËœÃ‚Â§ÃƒËœÃ‚Â± Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¬ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯ ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™.'],['02','ÃƒËœÃ‚Â±ÃƒËœÃ‚Â´ÃƒËœÃ‚Â¯ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™','ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Å¡Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Âª Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â² ÃƒËœÃ‚Â·ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¡ Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ…â€™ ÃƒËœÃ‚Â³ÃƒËœÃ‚Â±ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™Ãƒâ„¢Ã‚ÂÃƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚ÂªÃƒËœÃ…â€™ ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â´Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‚Â¾ Ãƒâ„¢Ã‹â€  Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦.'],['03','Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚Â³ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™','ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾ Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â´ÃƒËœÃ‚Â±Ãƒâ„¢Ã‚ÂÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã‹â€  ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¬ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¯ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â®ÃƒËœÃ‚ÂµÃƒËœÃ‚Âµ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¡ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚ÂªÃƒËœÃ‚Â± ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â± Ãƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â© ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â®ÃƒËœÃ‚Â´ ÃƒËœÃ‚Â¢Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â¯Ãƒâ„¢Ã¢â‚¬Â¡ IT.']],
+    resumeTitle: 'ÃƒËœÃ‚Â±ÃƒËœÃ‚Â²Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â¡', resumeSub: 'Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â² Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â± ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ÃƒËœÃ…â€™ Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â®Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒÅ¡Ã‚Â©Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‹â€  ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â .', contactTitle: 'ÃƒËœÃ‚Â¨Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯ ÃƒÅ¡Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â²Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚Â²ÃƒËœÃ‚Â´ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â²Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦.', contactText: 'ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã‚ÂÃƒËœÃ‚Â±ÃƒËœÃ‚ÂµÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ ÃƒËœÃ‚Â¨Ãƒâ„¢Ã‹â€ ÃƒËœÃ‚Â±ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ…â€™ ÃƒËœÃ‚ÂªÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ…â€™ ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â´Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã‚Â¾ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯ ÃƒËœÃ‚Â§ÃƒËœÃ‚Â² ÃƒËœÃ‚Â·ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¡ Ãƒâ„¢Ã‚Â¾ÃƒËœÃ‚Â±Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã‚ÂÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾ÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â  ÃƒËœÃ‚ÂªÃƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚Â³ ÃƒËœÃ‚Â¨ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯.', email: 'ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾', github: 'ÃƒÅ¡Ã‚Â¯Ãƒâ€ºÃ…â€™ÃƒËœÃ‚ÂªÃƒÂ¢Ã¢â€šÂ¬Ã…â€™Ãƒâ„¢Ã¢â‚¬Â¡ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨', linkedin: 'Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â¯Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â ', send: 'ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾ Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦', nameLabel: 'Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦', emailLabel: 'ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Å¾', messageLabel: 'Ãƒâ„¢Ã‚Â¾Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦', namePh: 'Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚Â´Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§', emailPh: 'you@example.com', messagePh: 'ÃƒËœÃ‚Â¯ÃƒËœÃ‚Â±ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Â¡ Ãƒâ„¢Ã‚ÂÃƒËœÃ‚Â±ÃƒËœÃ‚ÂµÃƒËœÃ‚Âª ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â±ÃƒËœÃ‚Â§Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦ ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‹â€ Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦', footer: 'ÃƒËœÃ‚Â³Ãƒâ€ºÃ…â€™ÃƒËœÃ‚Â¯ ÃƒËœÃ‚Â­ÃƒËœÃ‚Â´Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Âª ÃƒÅ¡Ã‚Â©ÃƒËœÃ‚Â±Ãƒâ€ºÃ…â€™Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ€ºÃ…â€™ Ãƒâ€šÃ‚Â· Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â­ÃƒËœÃ‚ÂµÃƒâ„¢Ã¢â‚¬Å¾ ÃƒËœÃ‚ÂªÃƒÅ¡Ã‚Â©Ãƒâ„¢Ã¢â‚¬Â ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ ÃƒÅ¡Ã‹Å“Ãƒâ€ºÃ…â€™ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â¹Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â§ÃƒËœÃ‚ÂªÃƒâ€ºÃ…â€™', back: 'ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§ÃƒËœÃ‚Â²ÃƒÅ¡Ã‚Â¯ÃƒËœÃ‚Â´ÃƒËœÃ‚Âª ÃƒËœÃ‚Â¨Ãƒâ„¢Ã¢â‚¬Â¡ ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾ÃƒËœÃ‚Â§', language: 'English', menu: 'Ãƒâ„¢Ã¢â‚¬Â¦Ãƒâ„¢Ã¢â‚¬Â Ãƒâ„¢Ã‹â€ '
+  }
+};
+
+function Layout({lang,setLang,children}){
+  const t=content[lang], loc=useLocation();
+  const [open,setOpen]=useState(false);
+  useEffect(()=>{setOpen(false); window.scrollTo({top:0,behavior:'smooth'});},[loc.pathname]);
+  useEffect(()=>{document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.documentElement.lang=lang==='fa'?'fa':'en';},[lang]);
+  return <div className={lang==='fa'?'app rtl':'app'}>
+    <header className="siteHeader">
+      <div className="container navWrap">
+        <Link to="/" className="brand"><span className="brandMark"><span>SK</span><i/></span><span><b>SAYED HASHMAT KARIMI</b><small>{t.role}</small></span></Link>
+        <nav className={open?'nav show':'nav'}>{t.nav.map(([p,l])=><Link key={p} className={loc.pathname===p?'active':''} to={p}>{l}</Link>)}</nav>
+        <div className="navActions"><button className="langBtn" onClick={()=>setLang(lang==='en'?'fa':'en')}><Languages size={15}/><span>{t.language}</span></button><button className="mobile" aria-label={t.menu} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></div>
+      </div>
+    </header>
+    <main>{children}</main>
+    <footer className="footer"><div className="container footerGrid"><div><div className="footerName">Sayed Hashmat Karimi</div><p>{t.role}</p></div><div className="footerLinks">{t.nav.slice(0,5).map(([p,l])=><Link key={p} to={p}>{l}</Link>)}</div><div className="footerSocial"><a href="https://github.com/hashmat-cyber" target="_blank" rel="noreferrer"><Github/></a><a href="https://www.linkedin.com/in/sayed-hashmat-karimi-5463ab416" target="_blank" rel="noreferrer"><Linkedin/></a><a href="mailto:sayedhashmatkarimi75@gmail.com"><Mail/></a></div></div><div className="container footerBottom"><span>Ãƒâ€šÃ‚Â© 2026 Sayed Hashmat Karimi</span><span>Information Technology Ãƒâ€šÃ‚Â· {t.back}</span></div></footer>
+  </div>
+}
+
+function PageHero({num,title,sub}){return <section className="pageHero"><div className="container"><div className="sectionEyebrow"><span>{num}</span><i/> INFORMATION TECHNOLOGY</div><h1>{title}</h1><p>{sub}</p></div></section>}
+function GlassCard({children,className=''}){return <div className={`glassCard ${className}`}>{children}</div>}
+
+function Home({t}){const nav=useNavigate();return <>
+  <section className="homeHero"><div className="heroGrid"/><div className="heroGlow glowA"/><div className="heroGlow glowB"/><div className="container heroLayout">
+    <div className="heroCopy"><div className="heroKicker"><span className="pulseDot"/>{t.heroKicker}</div><h1><span>SAYED HASHMAT</span> <em>KARIMI</em></h1><div className="roleLine"><span>{t.role}</span><i/><span>IT Ãƒâ€šÃ‚Â· 2026</span></div><h2>{t.heroTitle}</h2><p>{t.heroText}</p><div className="heroActions"><button className="btn btnPrimary" onClick={()=>nav('/projects')}>{t.explore}<ArrowRight/></button><button className="btn btnGlass" onClick={()=>nav('/resume')}>{t.resume}<ArrowUpRight/></button><button className="btn btnText" onClick={()=>nav('/contact')}>{t.about}<ChevronRight/></button></div><div className="heroStats">{t.stats.map(([v,l])=><div className="stat" key={l}><strong>{v}</strong><span>{l}</span></div>)}</div></div>
+    <div className="heroVisual"><div className="orbital orb1"/><div className="orbital orb2"/><div className="visualFrame"><div className="frameTop"><span><CircleDot/> LIVE PROFILE</span><span>01 / 04</span></div><div className="profileFallback"><img src="/assets/images/profile/profile.jpg" alt="Sayed Hashmat Karimi" /><div className="scanline"/></div><div className="profileCaption"><div><span>IDENTITY</span><b>SAYED HASHMAT KARIMI</b></div><div><span>FIELD</span><b>INFORMATION TECHNOLOGY</b></div></div></div><div className="techChip chip1"><Network/><span>NETWORK</span></div><div className="techChip chip2"><Database/><span>DATABASE</span></div><div className="techChip chip3"><Code2/><span>PYTHON</span></div><div className="terminalMini"><span>&gt;_ learning.mode</span><b>BUILD Ãƒâ€šÃ‚Â· TEST Ãƒâ€šÃ‚Â· IMPROVE</b></div></div>
+  </div></section>
+  <section className="marquee"><div className="container marqueeInner">{t.chips.map((x,i)=><span key={x}><Zap/> {x} <i>Ãƒâ€šÃ‚Â·</i></span>)}<span><Sparkles/> PRACTICAL IT</span></div></section>
+  <section className="section homeBento"><div className="container bentoIntro"><div><span className="sectionEyebrow">01 <i/> PROFILE</span><h2>{t.aboutTitle}</h2></div><p>{t.aboutText}</p></div><div className="container bentoGrid"><GlassCard className="bentoLarge"><span className="cardIndex">01</span><div className="bigIcon"><Cpu/></div><span className="eyebrowSmall">IDENTITY</span><h3>{t.role}</h3><p>{t.aboutText}</p><Link to="/about" className="cardLink">{t.about}<ArrowUpRight/></Link></GlassCard><GlassCard className="bentoFocus"><span className="eyebrowSmall">CURRENT FOCUS</span><div className="focusRows">{t.focus.slice(0,4).map((x,i)=><div key={x}><b>0{i+1}</b><span>{x}</span><CheckCircle2/></div>)}</div></GlassCard><GlassCard className="bentoMetric"><span className="eyebrowSmall">ACADEMIC SIGNAL</span><strong>90%</strong><p>Three-year average</p><div className="metricLine"><i/></div></GlassCard><GlassCard className="bentoMetric second"><span className="eyebrowSmall">PROJECT MINDSET</span><strong>03</strong><p>Practical IT projects</p><div className="nodeMap"><i/><i/><i/><i/></div></GlassCard></div></section>
+</>}
+
+function About({t}){return <><PageHero num="01" title={t.aboutTitle} sub={t.aboutText}/><section className="section"><div className="container aboutBento"><GlassCard className="aboutIdentity"><div className="aboutAvatar"><img src="/assets/images/profile/profile.jpg" alt="Sayed Hashmat Karimi" /></div><span className="eyebrowSmall">PERSONAL IDENTITY</span><h2>Sayed Hashmat Karimi</h2><p>{t.role}</p><div className="identityTags"><span>Afghanistan</span><span>IT</span><span>2026</span></div></GlassCard><GlassCard className="aboutStory"><span className="eyebrowSmall">MY APPROACH</span><h2>{t.aboutTitle}</h2><p>{t.aboutText}</p><div className="principles"><div><Layers3/><b>Learn</b><span>Independent study</span></div><div><Code2/><b>Build</b><span>Practical projects</span></div><div><Target/><b>Improve</b><span>Continuous growth</span></div></div></GlassCard><GlassCard className="aboutFocus"><span className="eyebrowSmall">WHAT I FOCUS ON</span>{t.focus.map((x,i)=><div className="focusItem" key={x}><span>0{i+1}</span><b>{x}</b><CheckCircle2/></div>)}</GlassCard></div></section></>}
+
+function Education({t}){return <><PageHero num="02" title={t.eduTitle} sub={t.eduSub}/><section className="section"><div className="container"><GlassCard className="performance"><div><span className="eyebrowSmall">{t.performance}</span><strong>90%</strong><p>three-year average</p></div><div className="progressTrack"><i/></div><div className="performanceSide"><strong>92%</strong><span>highest grade</span></div></GlassCard><div className="timeline">{t.journey.map((j,i)=><div className="timelineItem" key={i}><div className="timeLabel">{j[0]}</div><div className="timelineRail"><span/><i/></div><GlassCard className="timeCard"><span className="eyebrowSmall">ACADEMIC JOURNEY</span><h3>{j[1]}</h3><p>{j[2]}</p></GlassCard></div>)}</div><div className="highlights"><div><span className="sectionEyebrow">03 <i/> HIGHLIGHTS</span><h2>{t.highTitle}</h2></div><div className="highlightGrid">{t.high.map((x,i)=><GlassCard key={x}><Award/><b>0{i+1}</b><span>{x}</span></GlassCard>)}</div></div></div></section></>}
+
+function Skills({t}){return <><PageHero num="03" title={t.skillsTitle} sub={t.skillsSub}/><section className="section"><div className="container skillGrid">{t.skills.map(([n,l,d,I,p],i)=><GlassCard className={`skillCard s${i+1}`} key={n}><div className="skillHead"><div className="skillIcon"><I/></div><span>{l}</span></div><span className="cardIndex">0{i+1}</span><h3>{n}</h3><p>{d}</p><div className="skillViz"><div className="skillDots"><i/><i/><i/><i/><i/></div><div className="miniBar"><i style={{width:p}}/></div><b>{p}</b></div></GlassCard>)}</div></section></>}
+
+function Certificates({t}){
+  return (
+    <>
+      <PageHero
+        num="04"
+        title={t.certTitle}
+        sub={t.certSub}
+      />
+
+      <section className="section">
+        <div className="container certificateGrid">
+
+          {t.certs.map(([n,o,d,url,img,pdf],i)=>(
+            <GlassCard
+              className="certificate"
+              key={n}
+            >
+
+              <div className="certificateVisual">
+
+                {img ? (
+                  <img
+                    src={img}
+                    alt={`${n} certificate`}
+                    className="certificateImage"
+                  />
+                ) : (
+                  <Award/>
+                )}
+
+                {!img && (
+                  <div className="seal">
+                    CERTIFIED
+                  </div>
+                )}
+
+                {!img && (
+                  <span>
+                    0{i+1}
+                  </span>
+                )}
+
+              </div>
+
+              <div className="certificateBody">
+
+                <span className="eyebrowSmall">
+                  {o}
+                </span>
+
+                <h3>{n}</h3>
+
+                <p>{d}</p>
+
+                <div className="certMeta">
+
+                  <span>ACADEMIC</span>
+
+                  <div className="certActions">
+
+                    {pdf && (
+                      <a
+                        href={pdf}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="viewCert"
+                      >
+                        VIEW CERTIFICATE
+                        <ArrowUpRight/>
+                      </a>
+                    )}
+
+                    {url ? (
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="verifyCert"
+                      >
+                        VERIFY
+                        <ArrowUpRight/>
+                      </a>
+                    ) : (
+                      <CheckCircle2/>
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </GlassCard>
+          ))}
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Projects({t}){
+  const projectImages = [
+    '/assets/projects/it-help-desk-dashboard.jpg.png',
+    '/assets/projects/network-monitoring-dashboard.jpg.png',
+    '/assets/projects/student-information-database.jpg.png'
+  ];
+
+  return (
+    <>
+      <PageHero
+        num="05"
+        title={t.projTitle}
+        sub={t.projSub}
+      />
+
+      <section className="section">
+        <div className="container projectShowcase">
+
+          {t.projects.map(([n,tags,d,git,demo],i)=>(
+            <GlassCard
+              className={`projectCard project${i+1}`}
+              key={n}
+            >
+
+              <div className="projectMeta">
+                <span>0{i+1}</span>
+                <span>IT PROJECT</span>
+              </div>
+
+              <div className="projectInfo">
+                <span className="eyebrowSmall">
+                  {tags}
+                </span>
+
+                <h2>{n}</h2>
+
+                <p>{d}</p>
+
+                <div className="projectLinks">
+                  <a
+                    href={git}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Github/>
+                    GitHub
+                    <ArrowUpRight/>
+                  </a>
+
+                  <a
+                    href={demo}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Globe2/>
+                    Live Demo
+                    <ArrowUpRight/>
+                  </a>
+                </div>
+              </div>
+
+              <div className="projectMock projectScreenshot">
+                <img
+                  src={projectImages[i]}
+                  alt={`${n} dashboard screenshot`}
+                />
+              </div>
+
+            </GlassCard>
+          ))}
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Achievements({t}){
+  const achievements = [
+    {
+      number: '01',
+      title: 'First Rank — Grade 11',
+      year: '2025',
+      image: '/assets/achievements/grade-11-first-rank.jpg',
+      description: 'Awarded for achieving first place in Grade 11 for outstanding academic performance, commitment to learning, discipline, and consistent academic excellence.',
+      details: [
+        ['Achievement', 'First place in Grade 11'],
+        ['Academic Year', '2025'],
+        ['Issue Date', '25 December 2025'],
+        ['Certificate No.', 'SCH-2025-312'],
+        ['Issued by', 'Qabilbay High School'],
+        ['Recognition', 'Outstanding Academic Achievement']
+      ]
+    },
+    {
+      number: '02',
+      title: 'Successful Completion of Grade 12 First Four-Month Examination',
+      year: '2026',
+      image: '/assets/achievements/grade-12-first-four-month-exam.jpg',
+      description: 'Awarded for successfully completing the first four-month examination of Grade 12, demonstrating academic performance, commitment, discipline, and perseverance.',
+      details: [
+        ['Grade', '12'],
+        ['Academic Year', '2026'],
+        ['Achievement', 'Successful completion of first four-month examination'],
+        ['Issued by', 'Qabilbay High School'],
+        ['Principal', 'Sayed Ghulam Hanafi'],
+        ['Class Teacher', 'Mohammad Shaker Frotan']
+      ]
+    }
+  ];
+
+  return (
+    <>
+      <PageHero
+        num="06"
+        title={t.achTitle}
+        sub={t.achSub}
+      />
+
+      <section className="section achievementsSection">
+        <div className="container">
+
+          <div className="achievementsIntro">
+            <div>
+              <span className="eyebrowSmall">ACADEMIC ACHIEVEMENTS</span>
+              <h2>2025–2026</h2>
+              <p>Learning · Building · Improving</p>
+            </div>
+
+            <Trophy className="achievementsTrophy"/>
+          </div>
+
+          <div className="achievementsGrid">
+
+            {achievements.map((achievement) => (
+              <GlassCard
+                className="achievementCard"
+                key={achievement.title}
+              >
+
+                <div className="achievementCardHeader">
+                  <span className="achievementNumber">
+                    {achievement.number}
+                  </span>
+
+                  <span className="achievementYear">
+                    {achievement.year}
+                  </span>
+
+                  <CheckCircle2/>
+                </div>
+
+                <div className="achievementImageWrap">
+                  <img
+                    src={achievement.image}
+                    alt={achievement.title}
+                    className="achievementImage"
+                  />
+                </div>
+
+                <div className="achievementContent">
+
+                  <h3>{achievement.title}</h3>
+
+                  <p className="achievementDescription">
+                    {achievement.description}
+                  </p>
+
+                  <div className="achievementDetails">
+                    {achievement.details.map(([label, value]) => (
+                      <div
+                        className="achievementDetail"
+                        key={label}
+                      >
+                        <span>{label}</span>
+                        <strong>{value}</strong>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+
+              </GlassCard>
+            ))}
+
+          </div>
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Goals({t}){return <><PageHero num="07" title={t.goalsTitle} sub={t.goalsSub}/><section className="section darkSection"><div className="container goalList">{t.goals.map(g=><div className="goal" key={g[0]}><span>{g[0]}</span><div className="goalLine"><i/></div><div><span className="eyebrowSmall">ROADMAP</span><h2>{g[1]}</h2><p>{g[2]}</p></div><Target/></div>)}</div></section></>}
+
+function Resume({t}){return <><PageHero num="08" title={t.resumeTitle} sub={t.resumeSub}/><section className="section"><div className="container resumeGrid"><GlassCard className="resumeMain"><div className="resumeHeader"><div><span className="eyebrowSmall">PROFILE</span><h2>Sayed Hashmat Karimi</h2><p>{t.role}</p></div><div className="resumeCode">SK<br/><span>IT</span></div></div><div className="resumeRows"><div><GraduationCap/><span>Education</span><b>Qabilbay School Ãƒâ€šÃ‚Â· 2026</b></div><div><Code2/><span>Technical focus</span><b>Python Ãƒâ€šÃ‚Â· Web Ãƒâ€šÃ‚Â· Networking Ãƒâ€šÃ‚Â· Databases</b></div><div><Award/><span>Credentials</span><b>CS50x Ãƒâ€šÃ‚Â· CS50P Ãƒâ€šÃ‚Â· CS50 SQL Ãƒâ€šÃ‚Â· ICDL</b></div><div><Layers3/><span>Projects</span><b>3 practical IT projects</b></div></div><button className="btn btnPrimary resumeBtn"><Download/>Download Resume</button></GlassCard><GlassCard className="resumeSide"><span className="eyebrowSmall">CORE SIGNALS</span><div className="signal"><strong>90%</strong><span>Academic average</span></div><div className="signal"><strong>03</strong><span>Featured projects</span></div><div className="signal"><strong>04+</strong><span>Technical credentials</span></div></GlassCard></div></section></>}
+
+function Contact({t}){
+  const [sent,setSent] = useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+    setSent(true);
+  };
+
+  return (
+    <>
+      <PageHero
+        num="09"
+        title={t.contactTitle}
+        sub={t.contactText}
+      />
+
+      <section className="section">
+        <div className="container contactGrid">
+
+          <GlassCard className="contactIntro">
+            <span className="eyebrowSmall">
+              OPEN TO OPPORTUNITIES
+            </span>
+
+            <h2>{t.contactTitle}</h2>
+
+            <p>{t.contactText}</p>
+
+            <div className="contactLinks">
+
+              <a href="mailto:sayedhashmatkarimi75@gmail.com">
+                <Mail/>
+
+                <div>
+                  <span>{t.email}</span>
+                  <b>sayedhashmatkarimi75@gmail.com</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+              <a
+                href="https://github.com/hashmat-cyber"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Github/>
+
+                <div>
+                  <span>{t.github}</span>
+                  <b>github.com/hashmat-cyber</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/sayed-hashmat-karimi-5463ab416"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Linkedin/>
+
+                <div>
+                  <span>{t.linkedin}</span>
+                  <b>linkedin.com/in/sayed-hashmat-karimi-5463ab416</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+            </div>
+          </GlassCard>
+
+
+          <GlassCard className="contactForm">
+
+            <div className="formTitle">
+              <Terminal/>
+              <span>MESSAGE TERMINAL</span>
+            </div>
+
+            <form onSubmit={submit}>
+
+              <label>
+                {t.nameLabel}
+
+                <input
+                  required
+                  placeholder={t.namePh}
+                />
+              </label>
+
+              <label>
+                {t.emailLabel}
+
+                <input
+                  required
+                  type="email"
+                  placeholder={t.emailPh}
+                />
+              </label>
+
+              <label>
+                {t.messageLabel}
+
+                <textarea
+                  required
+                  placeholder={t.messagePh}
+                />
+              </label>
+
+              <button
+                className="btn btnPrimary"
+                type="submit"
+              >
+                <Send/>
+                {t.send}
+              </button>
+
+              {sent && (
+                <div className="success">
+                  <CheckCircle2/>
+                  Message ready. Thank you for contacting me.
+                </div>
+              )}
+
+            </form>
+
+          </GlassCard>
+
+        </div>
+      </section>
+    </>
+  );
+}
+function App(){const [lang,setLang]=useState('en');const t=content[lang];return <Layout lang={lang} setLang={setLang}><Routes><Route path="/" element={<Home t={t}/>}/><Route path="/about" element={<About t={t}/>}/><Route path="/education" element={<Education t={t}/>}/><Route path="/skills" element={<Skills t={t}/>}/><Route path="/certificates" element={<Certificates t={t}/>}/><Route path="/projects" element={<Projects t={t}/>}/><Route path="/achievements" element={<Achievements t={t}/>}/><Route path="/goals" element={<Goals t={t}/>}/><Route path="/resume" element={<Resume t={t}/>}/><Route path="/contact" element={<Contact t={t}/>}/><Route path="*" element={<Home t={t}/>}/></Routes></Layout>}
+createRoot(document.getElementById('root')).render(<BrowserRouter><App/></BrowserRouter>);
+
+
+
+
+
+
+
+
+
+
+
+
+
+

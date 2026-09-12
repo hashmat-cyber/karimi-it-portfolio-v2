@@ -1,0 +1,636 @@
+import React, { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  ArrowRight, ArrowUpRight, Award, BookOpen, CheckCircle2, Code2, Database,
+  Download, Github, Globe2, GraduationCap, Linkedin, Mail, Menu,
+  Monitor, Network, Server, Target, Trophy, X, Zap, Sparkles, Terminal,
+  ExternalLink, Layers3, Cpu, CircleDot, Send, ChevronRight
+} from 'lucide-react';
+import './styles.css';
+
+const content = {
+  en: {
+    nav: [['/','Home'],['/about','About'],['/education','Education'],['/skills','Skills'],['/certificates','Certificates'],['/projects','Projects'],['/achievements','Achievements'],['/resume','Resume'],['/contact','Contact']],
+    role: 'Information Technology Student',
+    heroKicker: 'PERSONAL DIGITAL LABORATORY · IT',
+    heroTitle: 'Building my future through Information Technology.',
+    heroText: 'I explore practical computing, programming, networking, databases, web technologies and digital problem solving — learning by building and improving.',
+    explore: 'Explore Projects', resume: 'View Resume', about: 'About Me',
+    stats: [['90%','Overall School Result'],['2014–2026','Academic journey'],['IT','Future direction']],
+    chips: ['Python','Networking','Databases','Web Development'],
+    aboutTitle: 'A practical learner with a clear direction.',
+    aboutText: 'My interest in Information Technology started at school, where I became interested in computers and how technology can solve everyday problems. Since then, I have continued learning through independent study, online courses and practical projects. I have built my foundation in programming, networking, databases, web technologies and computer systems by learning through practice.',
+    focusTitle: 'What I focus on',
+    focus: ['Computer Systems & IT Support — Windows, Linux, system setup and technical troubleshooting','Networking & Network Monitoring — IP networking, device monitoring, status checks and troubleshooting','Python & Flask Development — Python programming, Flask web applications and practical automation','SQL & Database Management — SQL, structured data and student information management','Web Applications & Practical Projects — Building real IT projects such as Help Desk, Network Monitoring and Student Database systems'],
+    eduTitle: 'Education', eduSub: 'From my school years to my planned university journey.', performance: 'Academic performance',
+    journey: [['2014','Education begins','The start of my long academic journey.'],['2024','Grade 10','83% academic result.'],['2025','Grade 11','Academic year completed successfully.'],['2026','Grade 12 completion','Overall school result: 90% out of 100.'],['Next','Bachelor’s in Information Technology','Planned university direction.'],['Future','Master’s degree','Advanced academic and professional development.']],
+    highTitle: 'Academic highlights', high: ['Overall school result: 90% out of 100','Top student in class','Four first-rank school certificates','Recognition for helping classmates learn computer skills'],
+    skillsTitle: 'IT Skills', skillsSub: 'A growing technical toolkit built through study and projects.', skills: [
+  ['Python', 'Intermediate', 'Programming fundamentals, scripting and problem-solving logic', Code2, '45%'],
+  ['Flask', 'Intermediate', 'Building web applications with Flask, routes and forms', Server, '40%'],
+  ['Networking', 'Intermediate', 'Networking concepts, IP, monitoring and troubleshooting', Network, '45%'],
+  ['Linux', 'Intermediate', 'Working with Linux operating systems and basic commands', Monitor, '40%'],
+  ['Windows', 'Good', 'System management, settings and basic troubleshooting', Monitor, '65%'],
+  ['SQL / Databases', 'Intermediate', 'SQL queries and structured database management', Database, '42%'],
+  ['Microsoft Office', 'Good', 'Word, Excel, PowerPoint and everyday productivity skills', Monitor, '75%'],
+  ['ICDL', 'Good', 'Computer fundamentals and digital productivity skills', Cpu, '80%'],
+  ['English Communication', 'Good', 'English speaking, reading and everyday communication', Globe2, '60%'],
+],
+    achTitle: 'Academic Achievements',
+    achSub: 'Selected academic achievements and school recognitions.',
+    certTitle: 'Certificates',
+    certSub: 'Selected certificates and academic achievements.',
+    certs: [
+      ['CS50x','Harvard / CS50','Introduction to Computer Science','https://cs50.harvard.edu/certificates/aeb8b52a-2cec-4b32-82d1-6e59e5bc853e','/assets/certificates/CS50X.jpg','/assets/certificates/CS50X.pdf'],
+      ['CS50P','Harvard / CS50','Introduction to Programming with Python','https://cs50.harvard.edu/certificates/590f0885-92c1-4263-9f8c-feb76327671a','/assets/certificates/CS50P.jpg','/assets/certificates/CS50P.pdf'],
+      ['CS50 SQL','Harvard / CS50','SQL and database fundamentals'],
+      ['ICDL','Digital Skills','Computer and productivity skills'],
+      ['English Certificates','Academic','English language learning and development'],
+      ['School Recognition','Qabilbay School','Academic and technology-related recognition']
+    ],
+    projTitle: 'Projects',
+    projSub: 'Practical IT projects built through learning and hands-on work.',
+    projects: [
+      ['Karimi IT Help Desk System','IT Support · Flask · SQLAlchemy','A web-based support system for creating, managing and tracking technical support tickets.','https://github.com/hashmat-cyber/Karimi-IT-Help-Desk-System','https://karimi-it-help-desk-system.onrender.com/'],
+      ['Karimi Network Monitoring Dashboard','Networking · Flask · Python','A monitoring dashboard for devices, status checks, alerts, scanning and network reporting.','https://github.com/hashmat-cyber/Karimi-Network-Monitoring-Dashboard','https://karimi-network-monitoring-dashboard.onrender.com'],
+      ['Karimi Student Information Database','Database · Python · Web','A structured student information project designed to demonstrate database organization and practical information management.','https://github.com/hashmat-cyber/Karimi-Student-Information-Database','https://karimi-student-information-database.onrender.com']
+    ],
+    goalsTitle: 'Academic & Career Goals', goalsSub: 'A simple roadmap with long-term direction.', goals: [['01','Bachelor’s in Information Technology','Build strong foundations in systems, networking, databases, software and modern digital technologies.'],['02','Professional Development','Strengthen my practical skills through projects, certifications, internships and continuous learning.'],['03','Master’s Degree','Continue advanced study and develop deeper expertise in a future IT specialization.']],
+    resumeTitle: 'Resume', resumeSub: 'A concise view of my academic direction, technical foundation and practical work.',
+    contactTitle: 'Let’s build something meaningful.', contactText: 'For scholarship, academic, internship or technology opportunities, you can reach me through my professional profiles.', email: 'Email', github: 'GitHub', linkedin: 'LinkedIn', send: 'Send message', nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePh: 'Your name', emailPh: 'you@example.com', messagePh: 'Tell me about the opportunity…',
+    footer: 'Sayed Hashmat Karimi · Information Technology Student', back: 'Back to top', language: 'Dari', menu: 'Menu'
+  }
+};
+
+function Layout({children}){
+  const t = content.en;
+  const loc = useLocation();
+  const [open,setOpen] = useState(false);
+
+  useEffect(()=>{
+    setOpen(false);
+    window.scrollTo({top:0,behavior:'smooth'});
+  },[loc.pathname]);
+
+  useEffect(()=>{
+    document.documentElement.dir = 'ltr';
+    document.documentElement.lang = 'en';
+  },[]);
+
+  return <div className="app">
+    <header className="siteHeader">
+      <div className="container navWrap">
+        <Link to="/" className="brand">
+          <span className="brandMark">
+            <span>SK</span>
+            <i/>
+          </span>
+
+          <span>
+            <b>SAYED HASHMAT KARIMI</b>
+            <small>{t.role}</small>
+          </span>
+        </Link>
+
+        <nav className={open?'nav show':'nav'}>
+          {t.nav.map(([p,l])=>
+            <Link
+              key={p}
+              className={loc.pathname===p?'active':''}
+              to={p}
+            >
+              {l}
+            </Link>
+          )}
+        </nav>
+
+        <div className="navActions">
+          <button
+            className="mobile"
+            aria-label={t.menu}
+            onClick={()=>setOpen(!open)}
+          >
+            {open?<X/>:<Menu/>}
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>{children}</main>
+
+    <footer className="footer">
+      <div className="container footerGrid">
+        <div>
+          <div className="footerName">Sayed Hashmat Karimi</div>
+          <p>{t.role}</p>
+        </div>
+
+        <div className="footerLinks">
+          {t.nav.slice(0,5).map(([p,l])=>
+            <Link key={p} to={p}>{l}</Link>
+          )}
+        </div>
+
+        <div className="footerSocial">
+          <a
+            href="https://github.com/hashmat-cyber"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Github/>
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/sayed-hashmat-karimi-5463ab416"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Linkedin/>
+          </a>
+
+          <a href="mailto:sayedhashmatkarimi75@gmail.com">
+            <Mail/>
+          </a>
+        </div>
+      </div>
+
+      <div className="container footerBottom">
+        <span>© 2026 Sayed Hashmat Karimi</span>
+        <span>Information Technology · {t.back}</span>
+      </div>
+    </footer>
+  </div>
+}
+
+function PageHero({num,title,sub}){return <section className="pageHero"><div className="container"><div className="sectionEyebrow"><span>{num}</span><i/> INFORMATION TECHNOLOGY</div><h1>{title}</h1><p>{sub}</p></div></section>}
+function GlassCard({children,className=''}){return <div className={`glassCard ${className}`}>{children}</div>}
+
+function Home({t}){const nav=useNavigate();return <>
+  <section className="homeHero"><div className="heroGrid"/><div className="heroGlow glowA"/><div className="heroGlow glowB"/><div className="container heroLayout">
+    <div className="heroCopy"><div className="heroKicker"><span className="pulseDot"/>{t.heroKicker}</div><h1><span>SAYED HASHMAT</span> <em>KARIMI</em></h1><div className="roleLine"><span>{t.role}</span><i/><span>IT · 2026</span></div><h2>{t.heroTitle}</h2><p>{t.heroText}</p><div className="heroActions"><button className="btn btnPrimary" onClick={()=>nav('/projects')}>{t.explore}<ArrowRight/></button><button className="btn btnGlass" onClick={()=>nav('/resume')}>{t.resume}<ArrowUpRight/></button><button className="btn btnText" onClick={()=>nav('/contact')}>{t.about}<ChevronRight/></button></div><div className="heroStats">{t.stats.map(([v,l])=><div className="stat" key={l}><strong>{v}</strong><span>{l}</span></div>)}</div></div>
+    <div className="heroVisual"><div className="orbital orb1"/><div className="orbital orb2"/><div className="visualFrame"><div className="frameTop"><span><CircleDot/> LIVE PROFILE</span><span>01 / 04</span></div><div className="profileFallback"><img src="/assets/images/profile/profile.jpg" alt="Sayed Hashmat Karimi" /><div className="scanline"/></div><div className="profileCaption"><div><span>IDENTITY</span><b>SAYED HASHMAT KARIMI</b></div><div><span>FIELD</span><b>INFORMATION TECHNOLOGY</b></div></div></div><div className="techChip chip1"><Network/><span>NETWORK</span></div><div className="techChip chip2"><Database/><span>DATABASE</span></div><div className="techChip chip3"><Code2/><span>PYTHON</span></div><div className="terminalMini"><span>&gt;_ learning.mode</span><b>BUILD · TEST · IMPROVE</b></div></div>
+  </div></section>
+  <section className="marquee"><div className="container marqueeInner">{t.chips.map((x,i)=><span key={x}><Zap/> {x} <i>·</i></span>)}<span><Sparkles/> PRACTICAL IT</span></div></section>
+  <section className="section homeBento"><div className="container bentoIntro"><div><span className="sectionEyebrow">01 <i/> PROFILE</span><h2>{t.aboutTitle}</h2></div><p>{t.aboutText}</p></div><div className="container bentoGrid"><GlassCard className="bentoLarge"><span className="cardIndex">01</span><div className="bigIcon"><Cpu/></div><span className="eyebrowSmall">IDENTITY</span><h3>{t.role}</h3><p>{t.aboutText}</p><Link to="/about" className="cardLink">{t.about}<ArrowUpRight/></Link></GlassCard><GlassCard className="bentoFocus"><span className="eyebrowSmall">CURRENT FOCUS</span><div className="focusRows">{t.focus.slice(0,4).map((x,i)=><div key={x}><b>0{i+1}</b><span>{x}</span><CheckCircle2/></div>)}</div></GlassCard><GlassCard className="bentoMetric"><span className="eyebrowSmall">ACADEMIC RESULT</span><strong>90%</strong><p>Overall school result · 90 out of 100</p><div className="metricLine"><i/></div></GlassCard><GlassCard className="bentoMetric second"><span className="eyebrowSmall">PROJECT MINDSET</span><strong>03</strong><p>Practical IT projects</p><div className="nodeMap"><i/><i/><i/><i/></div></GlassCard></div></section>
+</>}
+
+function About({t}){return <><PageHero num="01" title={t.aboutTitle} sub={t.aboutText}/><section className="section"><div className="container aboutBento"><GlassCard className="aboutIdentity"><div className="aboutAvatar"><img src="/assets/images/profile/profile.jpg" alt="Sayed Hashmat Karimi" /></div><span className="eyebrowSmall">PERSONAL IDENTITY</span><h2>Sayed Hashmat Karimi</h2><p>{t.role}</p><div className="identityTags"><span>Qabilbay School</span><span>IT</span><span>2026</span></div></GlassCard><GlassCard className="aboutStory"><span className="eyebrowSmall">MY APPROACH</span><h2>Learning by doing.</h2><p>I believe the best way to learn technology is by combining knowledge with practice. I learn through online courses, documentation and independent study, then apply what I learn by building projects and solving technical problems. Each project helps me understand my strengths, learn from mistakes and improve my skills.</p><div className="principles"><div><Layers3/><b>Learn</b><span>Independent study, courses and technical documentation</span></div><div><Code2/><b>Build</b><span>Real projects to turn knowledge into practical skills</span></div><div><Target/><b>Improve</b><span>Testing, troubleshooting and learning from mistakes</span></div></div></GlassCard><GlassCard className="aboutFocus"><span className="eyebrowSmall">WHAT I FOCUS ON</span>{t.focus.map((x,i)=><div className="focusItem" key={x}><span>0{i+1}</span><b>{x}</b><CheckCircle2/></div>)}</GlassCard></div></section></>}
+
+function Education({t}){return <><PageHero num="02" title={t.eduTitle} sub={t.eduSub}/><section className="section"><div className="container"><GlassCard className="performance"><div><span className="eyebrowSmall">{t.performance}</span><strong>90%</strong><p>Overall school result · 90 out of 100</p></div><div className="progressTrack"><i/></div><div className="performanceSide"><strong>100%</strong><span>full scale</span></div></GlassCard><div className="timeline">{t.journey.map((j,i)=><div className="timelineItem" key={i}><div className="timeLabel">{j[0]}</div><div className="timelineRail"><span/><i/></div><GlassCard className="timeCard"><span className="eyebrowSmall">ACADEMIC JOURNEY</span><h3>{j[1]}</h3><p>{j[2]}</p></GlassCard></div>)}</div><div className="highlights"><div><span className="sectionEyebrow">03 <i/> HIGHLIGHTS</span><h2>{t.highTitle}</h2></div><div className="highlightGrid">{t.high.map((x,i)=><GlassCard key={x}><Award/><b>0{i+1}</b><span>{x}</span></GlassCard>)}</div></div></div></section></>}
+
+function Skills({t}){return <><PageHero num="03" title={t.skillsTitle} sub={t.skillsSub}/><section className="section"><div className="container skillGrid">{t.skills.map(([n,l,d,I,p],i)=><GlassCard className={`skillCard s${i+1}`} key={n}><div className="skillHead"><div className="skillIcon"><I/></div><span>{l}</span></div><span className="cardIndex">0{i+1}</span><h3>{n}</h3><p>{d}</p><div className="skillViz"><div className="skillDots"><i/><i/><i/><i/><i/></div><div className="miniBar"><i style={{width:p}}/></div><b>{p}</b></div></GlassCard>)}</div></section></>}
+
+function Certificates({t}){
+  return (
+    <>
+      <PageHero
+        num="04"
+        title={t.certTitle}
+        sub={t.certSub}
+      />
+
+      <section className="section">
+        <div className="container certificateGrid">
+
+          {t.certs.map(([n,o,d,url,img,pdf],i)=>(
+            <GlassCard
+              className="certificate"
+              key={n}
+            >
+
+              <div className="certificateVisual">
+
+                {img ? (
+                  <img
+                    src={img}
+                    alt={`${n} certificate`}
+                    className="certificateImage"
+                  />
+                ) : (
+                  <Award/>
+                )}
+
+                {!img && (
+                  <div className="seal">
+                    CERTIFIED
+                  </div>
+                )}
+
+                {!img && (
+                  <span>
+                    0{i+1}
+                  </span>
+                )}
+
+              </div>
+
+              <div className="certificateBody">
+
+                <span className="eyebrowSmall">
+                  {o}
+                </span>
+
+                <h3>{n}</h3>
+
+                <p>{d}</p>
+
+                <div className="certMeta">
+
+                  <span>ACADEMIC</span>
+
+                  <div className="certActions">
+
+                    {pdf && (
+                      <a
+                        href={pdf}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="viewCert"
+                      >
+                        VIEW CERTIFICATE
+                        <ArrowUpRight/>
+                      </a>
+                    )}
+
+                    {url ? (
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="verifyCert"
+                      >
+                        VERIFY
+                        <ArrowUpRight/>
+                      </a>
+                    ) : (
+                      <CheckCircle2/>
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </GlassCard>
+          ))}
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Projects({t}){
+  const projectImages = [
+    '/assets/projects/it-help-desk-dashboard.jpg.png',
+    '/assets/projects/network-monitoring-dashboard.jpg.png',
+    '/assets/projects/student-information-database.jpg.png'
+  ];
+
+  return (
+    <>
+      <PageHero
+        num="05"
+        title={t.projTitle}
+        sub={t.projSub}
+      />
+
+      <section className="section">
+        <div className="container projectShowcase">
+
+          {t.projects.map(([n,tags,d,git,demo],i)=>(
+            <GlassCard
+              className={`projectCard project${i+1}`}
+              key={n}
+            >
+
+              <div className="projectMeta">
+                <span>0{i+1}</span>
+                <span>IT PROJECT</span>
+              </div>
+
+              <div className="projectInfo">
+                <span className="eyebrowSmall">
+                  {tags}
+                </span>
+
+                <h2>{n}</h2>
+
+                <p>{d}</p>
+
+                <div className="projectLinks">
+                  <a
+                    href={git}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Github/>
+                    GitHub
+                    <ArrowUpRight/>
+                  </a>
+
+                  <a
+                    href={demo}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Globe2/>
+                    Live Demo
+                    <ArrowUpRight/>
+                  </a>
+                </div>
+              </div>
+
+              <div className="projectMock projectScreenshot">
+                <img
+                  src={projectImages[i]}
+                  alt={`${n} dashboard screenshot`}
+                />
+              </div>
+
+            </GlassCard>
+          ))}
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Achievements({t}){
+  const achievements = [
+    {
+      number: '01',
+      title: 'First Rank — Grade 11',
+      year: '2025',
+      image: '/assets/achievements/grade-11-first-rank.jpg',
+      description: 'Awarded for achieving first place in Grade 11 for outstanding academic performance, commitment to learning, discipline, and consistent academic excellence.',
+      details: [
+        ['Achievement', 'First place in Grade 11'],
+        ['Academic Year', '2025'],
+        ['Issue Date', '25 December 2025'],
+        ['Certificate No.', 'SCH-2025-312'],
+        ['Issued by', 'Qabilbay High School'],
+        ['Recognition', 'Outstanding Academic Achievement']
+      ]
+    },
+    {
+      number: '02',
+      title: 'Successful Completion of Grade 12 First Four-Month Examination',
+      year: '2026',
+      image: '/assets/achievements/grade-12-first-four-month-exam.jpg',
+      description: 'Awarded for successfully completing the first four-month examination of Grade 12, demonstrating academic performance, commitment, discipline, and perseverance.',
+      details: [
+        ['Grade', '12'],
+        ['Academic Year', '2026'],
+        ['Achievement', 'Successful completion of first four-month examination'],
+        ['Issued by', 'Qabilbay High School'],
+        ['Principal', 'Sayed Ghulam Hanafi'],
+        ['Class Teacher', 'Mohammad Shaker Frotan']
+      ]
+    }
+  ];
+
+  return (
+    <>
+      <PageHero
+        num="06"
+        title={t.achTitle}
+        sub={t.achSub}
+      />
+
+      <section className="section achievementsSection">
+        <div className="container">
+
+          <div className="achievementsIntro">
+            <div>
+              <span className="eyebrowSmall">ACADEMIC ACHIEVEMENTS</span>
+              <h2>2025–2026</h2>
+              <p>Learning · Building · Improving</p>
+            </div>
+
+            <Trophy className="achievementsTrophy"/>
+          </div>
+
+          <div className="achievementsGrid">
+
+            {achievements.map((achievement) => (
+              <GlassCard
+                className="achievementCard"
+                key={achievement.title}
+              >
+
+                <div className="achievementCardHeader">
+                  <span className="achievementNumber">
+                    {achievement.number}
+                  </span>
+
+                  <span className="achievementYear">
+                    {achievement.year}
+                  </span>
+
+                  <CheckCircle2/>
+                </div>
+
+                <div className="achievementImageWrap">
+                  <img
+                    src={achievement.image}
+                    alt={achievement.title}
+                    className="achievementImage"
+                  />
+                </div>
+
+                <div className="achievementContent">
+
+                  <h3>{achievement.title}</h3>
+
+                  <p className="achievementDescription">
+                    {achievement.description}
+                  </p>
+
+                  <div className="achievementDetails">
+                    {achievement.details.map(([label, value]) => (
+                      <div
+                        className="achievementDetail"
+                        key={label}
+                      >
+                        <span>{label}</span>
+                        <strong>{value}</strong>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+
+              </GlassCard>
+            ))}
+
+          </div>
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Goals({t}){return <><PageHero num="07" title={t.goalsTitle} sub={t.goalsSub}/><section className="section darkSection"><div className="container goalList">{t.goals.map(g=><div className="goal" key={g[0]}><span>{g[0]}</span><div className="goalLine"><i/></div><div><span className="eyebrowSmall">ROADMAP</span><h2>{g[1]}</h2><p>{g[2]}</p></div><Target/></div>)}</div></section></>}
+
+function Resume({t}){return <><PageHero num="08" title={t.resumeTitle} sub={t.resumeSub}/><section className="section"><div className="container resumeGrid"><GlassCard className="resumeMain"><div className="resumeHeader"><div><span className="eyebrowSmall">PROFILE</span><h2>Sayed Hashmat Karimi</h2><p>{t.role}</p></div><div className="resumeCode">SK<br/><span>IT</span></div></div><div className="resumeRows"><div><GraduationCap/><span>Education</span><b>Qabilbay School · 2026</b></div><div><Code2/><span>Technical focus</span><b>Python · Web · Networking · Databases</b></div><div><Award/><span>Credentials</span><b>CS50x · CS50P · CS50 SQL · ICDL</b></div><div><Layers3/><span>Projects</span><b>3 practical IT projects</b></div></div><button className="btn btnPrimary resumeBtn"><Download/>Download Resume</button></GlassCard><GlassCard className="resumeSide"><span className="eyebrowSmall">CORE SIGNALS</span><div className="signal"><strong>90%</strong><span>Overall school result</span></div><div className="signal"><strong>03</strong><span>Featured projects</span></div><div className="signal"><strong>04+</strong><span>Technical credentials</span></div></GlassCard></div></section></>}
+
+function Contact({t}){
+  const [sent,setSent] = useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+    setSent(true);
+  };
+
+  return (
+    <>
+      <PageHero
+        num="09"
+        title={t.contactTitle}
+        sub={t.contactText}
+      />
+
+      <section className="section">
+        <div className="container contactGrid">
+
+          <GlassCard className="contactIntro">
+            <span className="eyebrowSmall">
+              OPEN TO OPPORTUNITIES
+            </span>
+
+            <h2>{t.contactTitle}</h2>
+
+            <p>{t.contactText}</p>
+
+            <div className="contactLinks">
+
+              <a href="mailto:sayedhashmatkarimi75@gmail.com">
+                <Mail/>
+
+                <div>
+                  <span>{t.email}</span>
+                  <b>sayedhashmatkarimi75@gmail.com</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+              <a
+                href="https://github.com/hashmat-cyber"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Github/>
+
+                <div>
+                  <span>{t.github}</span>
+                  <b>github.com/hashmat-cyber</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/sayed-hashmat-karimi-5463ab416"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Linkedin/>
+
+                <div>
+                  <span>{t.linkedin}</span>
+                  <b>linkedin.com/in/sayed-hashmat-karimi-5463ab416</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+            </div>
+          </GlassCard>
+
+
+          <GlassCard className="contactForm">
+
+            <div className="formTitle">
+              <Terminal/>
+              <span>MESSAGE TERMINAL</span>
+            </div>
+
+            <form onSubmit={submit}>
+
+              <label>
+                {t.nameLabel}
+
+                <input
+                  required
+                  placeholder={t.namePh}
+                />
+              </label>
+
+              <label>
+                {t.emailLabel}
+
+                <input
+                  required
+                  type="email"
+                  placeholder={t.emailPh}
+                />
+              </label>
+
+              <label>
+                {t.messageLabel}
+
+                <textarea
+                  required
+                  placeholder={t.messagePh}
+                />
+              </label>
+
+              <button
+                className="btn btnPrimary"
+                type="submit"
+              >
+                <Send/>
+                {t.send}
+              </button>
+
+              {sent && (
+                <div className="success">
+                  <CheckCircle2/>
+                  Message ready. Thank you for contacting me.
+                </div>
+              )}
+
+            </form>
+
+          </GlassCard>
+
+        </div>
+      </section>
+    </>
+  );
+}
+function App(){const t=content.en;return <Layout><Routes><Route path="/" element={<Home t={t}/>}/><Route path="/about" element={<About t={t}/>}/><Route path="/education" element={<Education t={t}/>}/><Route path="/skills" element={<Skills t={t}/>}/><Route path="/certificates" element={<Certificates t={t}/>}/><Route path="/projects" element={<Projects t={t}/>}/><Route path="/achievements" element={<Achievements t={t}/>}/><Route path="/goals" element={<Goals t={t}/>}/><Route path="/resume" element={<Resume t={t}/>}/><Route path="/contact" element={<Contact t={t}/>}/><Route path="*" element={<Home t={t}/>}/></Routes></Layout>}
+createRoot(document.getElementById('root')).render(<BrowserRouter><App/></BrowserRouter>);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

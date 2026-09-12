@@ -1,0 +1,553 @@
+﻿import React, { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  ArrowRight, ArrowUpRight, Award, BookOpen, CheckCircle2, Code2, Database,
+  Download, Github, Globe2, GraduationCap, Languages, Linkedin, Mail, Menu,
+  Monitor, Network, Server, Target, Trophy, X, Zap, Sparkles, Terminal,
+  ExternalLink, Layers3, Cpu, CircleDot, Send, ChevronRight
+} from 'lucide-react';
+import './styles.css';
+
+const content = {
+  en: {
+    nav: [['/','Home'],['/about','About'],['/education','Education'],['/skills','Skills'],['/certificates','Certificates'],['/projects','Projects'],['/achievements','Achievements'],['/resume','Resume'],['/contact','Contact']],
+    role: 'Information Technology Student',
+    heroKicker: 'PERSONAL DIGITAL LABORATORY Â· IT',
+    heroTitle: 'Building my future through Information Technology.',
+    heroText: 'I explore practical computing, programming, networking, databases, web technologies and digital problem solving â€” learning by building and improving.',
+    explore: 'Explore Projects', resume: 'View Resume', about: 'About Me',
+    stats: [['90%','Three-year average'],['92%','Highest grade'],['2014â€“2026','Academic journey'],['IT','Future direction']],
+    chips: ['Python','Networking','Databases','Web Development'],
+    aboutTitle: 'A practical learner with a clear direction.',
+    aboutText: 'My interest in Information Technology grew through school and hands-on computer learning. I have developed my skills through independent study, online courses and practical projects, especially where technology can solve real problems.',
+    focusTitle: 'What I focus on',
+    focus: ['Computer systems & operating systems','Networking and IT infrastructure','Python and practical programming','Web technologies and databases','Digital productivity and problem solving'],
+    eduTitle: 'Education', eduSub: 'From my school years to my planned university journey.', performance: 'Academic performance',
+    journey: [['2014','Education begins','The start of my long academic journey.'],['2024','Grade 10','83% academic result.'],['2025','Grade 11','92% academic result.'],['2026','Grade 12 completion','Three-year average: 90%.'],['Next','Bachelorâ€™s in Information Technology','Planned university direction.'],['Future','Masterâ€™s degree','Advanced academic and professional development.']],
+    highTitle: 'Academic highlights', high: ['Three-year average of 90%','Highest recorded grade: 92%','Top student in class','Four first-rank school certificates','Recognition for helping classmates learn computer skills'],
+    skillsTitle: 'IT Skills', skillsSub: 'A growing technical toolkit built through study and projects.', skills: [
+  ['Python', 'Intermediate', 'Programming fundamentals, scripting and problem-solving logic', Code2, '45%'],
+  ['Flask', 'Intermediate', 'Building web applications with Flask, routes and forms', Server, '40%'],
+  ['Networking', 'Intermediate', 'Networking concepts, IP, monitoring and troubleshooting', Network, '45%'],
+  ['Linux', 'Intermediate', 'Working with Linux operating systems and basic commands', Monitor, '40%'],
+  ['Windows', 'Good', 'System management, settings and basic troubleshooting', Monitor, '65%'],
+  ['SQL / Databases', 'Intermediate', 'SQL queries and structured database management', Database, '42%'],
+],
+    goalsTitle: 'Academic & Career Goals', goalsSub: 'A simple roadmap with long-term direction.', goals: [['01','Bachelorâ€™s in Information Technology','Build strong foundations in systems, networking, databases, software and modern digital technologies.'],['02','Professional Development','Strengthen my practical skills through projects, certifications, internships and continuous learning.'],['03','Masterâ€™s Degree','Continue advanced study and develop deeper expertise in a future IT specialization.']],
+    resumeTitle: 'Resume', resumeSub: 'A concise view of my academic direction, technical foundation and practical work.',
+    contactTitle: 'Letâ€™s build something meaningful.', contactText: 'For scholarship, academic, internship or technology opportunities, you can reach me through my professional profiles.', email: 'Email', github: 'GitHub', linkedin: 'LinkedIn', send: 'Send message', nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePh: 'Your name', emailPh: 'you@example.com', messagePh: 'Tell me about the opportunityâ€¦',
+    footer: 'Sayed Hashmat Karimi Â· Information Technology Student', back: 'Back to top', language: 'Dari', menu: 'Menu'
+  },
+  fa: {
+    nav: [['/','Ø®Ø§Ù†Ù‡'],['/about','Ø¯Ø±Ø¨Ø§Ø±Ù‡ Ù…Ù†'],['/education','ØªØ­ØµÛŒÙ„Ø§Øª'],['/skills','Ù…Ù‡Ø§Ø±Øªâ€ŒÙ‡Ø§'],['/certificates','Ø³Ø±ØªÛŒÙÛŒÚ©Øªâ€ŒÙ‡Ø§'],['/projects','Ù¾Ø±ÙˆÚ˜Ù‡â€ŒÙ‡Ø§'],['/achievements','Ø¯Ø³ØªØ§ÙˆØ±Ø¯Ù‡Ø§'],['/resume','Ø±Ø²ÙˆÙ…Ù‡'],['/contact','ØªÙ…Ø§Ø³']],
+    role: 'Ù…Ø­ØµÙ„ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÛŒ', heroKicker: 'Ù¾ÙˆØ±ØªÙÙˆÙ„ÛŒÙˆÛŒ Ø´Ø®ØµÛŒ Â· ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÛŒ',
+    heroTitle: 'Ø¢ÛŒÙ†Ø¯Ù‡â€ŒØ§Ù… Ø±Ø§ Ø¨Ø§ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÛŒ Ù…ÛŒâ€ŒØ³Ø§Ø²Ù….', heroText: 'Ù…Ù† Ø±ÙˆÛŒ Ú©Ù…Ù¾ÛŒÙˆØªØ±ØŒ Ø¨Ø±Ù†Ø§Ù…Ù‡â€ŒÙ†ÙˆÛŒØ³ÛŒØŒ Ø´Ø¨Ú©Ù‡ØŒ Ø¯ÛŒØªØ§Ø¨ÛŒØ³ØŒ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒâ€ŒÙ‡Ø§ÛŒ ÙˆØ¨ Ùˆ Ø­Ù„ Ù…Ø´Ú©Ù„Ø§Øª Ø¯ÛŒØ¬ÛŒØªØ§Ù„ÛŒ Ú©Ø§Ø± Ù…ÛŒâ€ŒÚ©Ù†Ù… Ùˆ Ø¨Ø§ Ø³Ø§Ø®ØªÙ† Ù¾Ø±ÙˆÚ˜Ù‡â€ŒÙ‡Ø§ÛŒ Ø¹Ù…Ù„ÛŒ ÛŒØ§Ø¯ Ù…ÛŒâ€ŒÚ¯ÛŒØ±Ù….',
+    explore: 'Ø¯ÛŒØ¯Ù† Ù¾Ø±ÙˆÚ˜Ù‡â€ŒÙ‡Ø§', resume: 'Ø¯ÛŒØ¯Ù† Ø±Ø²ÙˆÙ…Ù‡', about: 'Ø¯Ø±Ø¨Ø§Ø±Ù‡ Ù…Ù†', stats: [['90Ùª','Ù…ÛŒØ§Ù†Ú¯ÛŒÙ† Ø³Ù‡ Ø³Ø§Ù„'],['92Ùª','Ø¨Ù„Ù†Ø¯ØªØ±ÛŒÙ† Ù†Ù…Ø±Ù‡'],['2014â€“2026','Ù…Ø³ÛŒØ± ØªØ­ØµÛŒÙ„ÛŒ'],['IT','Ù…Ø³ÛŒØ± Ø¢ÛŒÙ†Ø¯Ù‡']], chips: ['Ù¾Ø§ÛŒØªÙˆÙ†','Ø´Ø¨Ú©Ù‡','Ø¯ÛŒØªØ§Ø¨ÛŒØ³','ØªÙˆØ³Ø¹Ù‡ ÙˆØ¨'],
+    aboutTitle: 'ÛŒÚ© ÛŒØ§Ø¯Ú¯ÛŒØ±Ù†Ø¯Ù‡ Ø¹Ù…Ù„ÛŒ Ø¨Ø§ Ù…Ø³ÛŒØ± Ø±ÙˆØ´Ù†.', aboutText: 'Ø¹Ù„Ø§Ù‚Ù‡ Ù…Ù† Ø¨Ù‡ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÛŒ Ø§Ø² Ù…Ú©ØªØ¨ Ùˆ Ú©Ø§Ø± Ø¹Ù…Ù„ÛŒ Ø¨Ø§ Ú©Ù…Ù¾ÛŒÙˆØªØ± Ø¢ØºØ§Ø² Ø´Ø¯. Ù…Ù‡Ø§Ø±Øªâ€ŒÙ‡Ø§ÛŒÙ… Ø±Ø§ Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù…Ø·Ø§Ù„Ø¹Ù‡ Ø´Ø®ØµÛŒØŒ Ú©ÙˆØ±Ø³â€ŒÙ‡Ø§ÛŒ Ø¢Ù†Ù„Ø§ÛŒÙ† Ùˆ Ù¾Ø±ÙˆÚ˜Ù‡â€ŒÙ‡Ø§ÛŒ Ø¹Ù…Ù„ÛŒ ØªÙˆØ³Ø¹Ù‡ Ø¯Ø§Ø¯Ù‡â€ŒØ§Ù…Ø› Ø¨Ù‡â€ŒØ®ØµÙˆØµ Ø¯Ø± Ø¬Ø§Ù‡Ø§ÛŒÛŒ Ú©Ù‡ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…ÛŒâ€ŒØªÙˆØ§Ù†Ø¯ Ù…Ø´Ú©Ù„Ø§Øª ÙˆØ§Ù‚Ø¹ÛŒ Ø±Ø§ Ø­Ù„ Ú©Ù†Ø¯.', focusTitle: 'ØªÙ…Ø±Ú©Ø² Ù…Ù†', focus: ['Ø³ÛŒØ³ØªÙ…â€ŒÙ‡Ø§ÛŒ Ú©Ù…Ù¾ÛŒÙˆØªØ± Ùˆ Ø³ÛŒØ³ØªÙ…â€ŒØ¹Ø§Ù…Ù„â€ŒÙ‡Ø§','Ø´Ø¨Ú©Ù‡ Ùˆ Ø²ÛŒØ±Ø³Ø§Ø®Øª IT','Ù¾Ø§ÛŒØªÙˆÙ† Ùˆ Ø¨Ø±Ù†Ø§Ù…Ù‡â€ŒÙ†ÙˆÛŒØ³ÛŒ Ø¹Ù…Ù„ÛŒ','ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ ÙˆØ¨ Ùˆ Ø¯ÛŒØªØ§Ø¨ÛŒØ³â€ŒÙ‡Ø§','Ø¨Ù‡Ø±Ù‡â€ŒÙˆØ±ÛŒ Ø¯ÛŒØ¬ÛŒØªØ§Ù„ÛŒ Ùˆ Ø­Ù„ Ù…Ø´Ú©Ù„Ø§Øª'],
+    eduTitle: 'ØªØ­ØµÛŒÙ„Ø§Øª', eduSub: 'Ø§Ø² Ø³Ø§Ù„â€ŒÙ‡Ø§ÛŒ Ù…Ú©ØªØ¨ ØªØ§ Ù…Ø³ÛŒØ± Ø¨Ø±Ù†Ø§Ù…Ù‡â€ŒØ±ÛŒØ²ÛŒâ€ŒØ´Ø¯Ù‡ Ø¯Ø§Ù†Ø´Ú¯Ø§Ù‡ÛŒ Ù…Ù†.', performance: 'Ø¹Ù…Ù„Ú©Ø±Ø¯ ØªØ­ØµÛŒÙ„ÛŒ', journey: [['2014','Ø¢ØºØ§Ø² ØªØ­ØµÛŒÙ„','Ø´Ø±ÙˆØ¹ Ù…Ø³ÛŒØ± Ø·ÙˆÙ„Ø§Ù†ÛŒ ØªØ­ØµÛŒÙ„ÛŒ Ù…Ù†.'],['2024','ØµÙ†Ù Û±Û°','Ù†ØªÛŒØ¬Ù‡ ØªØ­ØµÛŒÙ„ÛŒ Û¸Û³Ùª.'],['2025','ØµÙ†Ù Û±Û±','Ù†ØªÛŒØ¬Ù‡ ØªØ­ØµÛŒÙ„ÛŒ Û¹Û²Ùª.'],['2026','ØªÚ©Ù…ÛŒÙ„ ØµÙ†Ù Û±Û²','Ù…ÛŒØ§Ù†Ú¯ÛŒÙ† Ø³Ù‡ Ø³Ø§Ù„: Û¹Û°Ùª.'],['Ø¨Ø¹Ø¯Ø§Ù‹','Ù„ÛŒØ³Ø§Ù†Ø³ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÛŒ','Ù…Ø³ÛŒØ± Ø¨Ø±Ù†Ø§Ù…Ù‡â€ŒØ±ÛŒØ²ÛŒâ€ŒØ´Ø¯Ù‡ Ø¯Ø§Ù†Ø´Ú¯Ø§Ù‡ÛŒ.'],['Ø¢ÛŒÙ†Ø¯Ù‡','Ù…Ø§Ø³ØªØ±ÛŒ','Ø±Ø´Ø¯ Ù¾ÛŒØ´Ø±ÙØªÙ‡ ØªØ­ØµÛŒÙ„ÛŒ Ùˆ Ù…Ø³Ù„Ú©ÛŒ.']],
+    highTitle: 'Ù†Ú©Ø§Øª Ø¨Ø±Ø¬Ø³ØªÙ‡ ØªØ­ØµÛŒÙ„ÛŒ', high: ['Ù…ÛŒØ§Ù†Ú¯ÛŒÙ† Ø³Ù‡ Ø³Ø§Ù„ Û¹Û°Ùª','Ø¨Ù„Ù†Ø¯ØªØ±ÛŒÙ† Ù†Ù…Ø±Ù‡ Ø«Ø¨Øªâ€ŒØ´Ø¯Ù‡: Û¹Û²Ùª','Ø´Ø§Ú¯Ø±Ø¯ Ø§ÙˆÙ„ ØµÙ†Ù','Ú†Ù‡Ø§Ø± Ø³Ø±ØªÛŒÙÛŒÚ©Øª Ù…Ù‚Ø§Ù… Ø§ÙˆÙ„ Ù…Ú©ØªØ¨','ØªÙ‚Ø¯ÛŒØ± Ø¨Ù‡ Ø¯Ù„ÛŒÙ„ Ú©Ù…Ú© Ø¨Ù‡ Ù‡Ù…â€ŒØµÙ†ÙÛŒâ€ŒÙ‡Ø§ Ø¯Ø± ÛŒØ§Ø¯Ú¯ÛŒØ±ÛŒ Ú©Ù…Ù¾ÛŒÙˆØªØ±'],
+    skillsTitle: '\u0645\u0647\u0627\u0631\u062a\u200c\u0647\u0627\u06cc IT', skillsSub: '\u0645\u062c\u0645\u0648\u0639\u0647\u200c\u0627\u06cc \u0627\u0632 \u0645\u0647\u0627\u0631\u062a\u200c\u0647\u0627\u06cc \u062a\u062e\u0646\u06cc\u06a9\u06cc \u06a9\u0647 \u0627\u0632 \u0637\u0631\u06cc\u0642 \u0622\u0645\u0648\u0632\u0634 \u0648 \u067e\u0631\u0648\u0698\u0647\u200c\u0647\u0627 \u062f\u0631 \u062d\u0627\u0644 \u0631\u0634\u062f \u0627\u0633\u062a.', skills: [
+  ['Python', '\u0645\u062a\u0648\u0633\u0637', '\u0645\u0628\u0627\u0646\u06cc \u0628\u0631\u0646\u0627\u0645\u0647\u200c\u0646\u0648\u06cc\u0633\u06cc\u060c \u0627\u0633\u06a9\u0631\u06cc\u067e\u062a \u0648 \u0645\u0646\u0637\u0642 \u0628\u0631\u0646\u0627\u0645\u0647', Code2, '45%'],
+  ['Flask', '\u0645\u062a\u0648\u0633\u0637', '\u0633\u0627\u062e\u062a \u0628\u0631\u0646\u0627\u0645\u0647\u200c\u0647\u0627\u06cc \u0648\u0628 \u0628\u0627 Flask\u060c \u0631\u0648\u062a\u200c\u0647\u0627 \u0648 \u0641\u0631\u0645\u200c\u0647\u0627', Server, '40%'],
+  ['Networking', '\u0645\u062a\u0648\u0633\u0637', '\u0645\u0641\u0627\u0647\u06cc\u0645 \u0634\u0628\u06a9\u0647\u060c IP\u060c \u0645\u0627\u0646\u06cc\u062a\u0648\u0631\u06cc\u0646\u06af \u0648 \u0639\u06cc\u0628\u200c\u06cc\u0627\u0628\u06cc', Network, '45%'],
+  ['Linux', '\u0645\u062a\u0648\u0633\u0637', '\u06a9\u0627\u0631 \u0628\u0627 \u0633\u06cc\u0633\u062a\u0645\u200c\u0639\u0627\u0645\u0644 Linux \u0648 \u062f\u0633\u062a\u0648\u0631\u0627\u062a \u067e\u0627\u06cc\u0647', Monitor, '40%'],
+  ['Windows', '\u062e\u0648\u0628', '\u0645\u062f\u06cc\u0631\u06cc\u062a \u0633\u06cc\u0633\u062a\u0645\u060c \u062a\u0646\u0638\u06cc\u0645\u0627\u062a \u0648 \u0639\u06cc\u0628\u200c\u06cc\u0627\u0628\u06cc \u067e\u0627\u06cc\u0647', Monitor, '65%'],
+  ['SQL / Databases', '\u0645\u062a\u0648\u0633\u0637', '\u067e\u0631\u0633\u200c\u0648\u062c\u0648\u0647\u0627\u06cc SQL \u0648 \u0645\u062f\u06cc\u0631\u06cc\u062a \u0627\u0637\u0644\u0627\u0639\u0627\u062a \u062f\u0631 \u062f\u06cc\u062a\u0627\u0628\u06cc\u0633', Database, '42%'],
+  ['Git / GitHub', '\u0645\u062a\u0648\u0633\u0637', '\u06a9\u0646\u062a\u0631\u0644 \u0646\u0633\u062e\u0647 \u0648 \u0645\u062f\u06cc\u0631\u06cc\u062a repository\u0647\u0627', Code2, '40%'],
+  ['Microsoft Office', '\u062e\u0648\u0628', 'Word\u060c Excel\u060c PowerPoint \u0648 \u0645\u0633\u062a\u0646\u062f\u0633\u0627\u0632\u06cc', BookOpen, '70%']
+],
+    goalsTitle: 'Ø§Ù‡Ø¯Ø§Ù ØªØ­ØµÛŒÙ„ÛŒ Ùˆ Ù…Ø³Ù„Ú©ÛŒ', goalsSub: 'Ù†Ù‚Ø´Ù‡ Ø³Ø§Ø¯Ù‡ Ù…Ù† Ø¨Ø±Ø§ÛŒ Ù…Ø³ÛŒØ± Ø¢ÛŒÙ†Ø¯Ù‡.', goals: [['01','Ù„ÛŒØ³Ø§Ù†Ø³ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÛŒ','Ø³Ø§Ø®ØªÙ† Ù¾Ø§ÛŒÙ‡ Ù‚ÙˆÛŒ Ø¯Ø± Ø³ÛŒØ³ØªÙ…â€ŒÙ‡Ø§ØŒ Ø´Ø¨Ú©Ù‡ØŒ Ø¯ÛŒØªØ§Ø¨ÛŒØ³ØŒ Ù†Ø±Ù…â€ŒØ§ÙØ²Ø§Ø± Ùˆ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒâ€ŒÙ‡Ø§ÛŒ Ø¬Ø¯ÛŒØ¯ Ø¯ÛŒØ¬ÛŒØªØ§Ù„ÛŒ.'],['02','Ø±Ø´Ø¯ Ù…Ø³Ù„Ú©ÛŒ','ØªÙ‚ÙˆÛŒØª Ù…Ù‡Ø§Ø±Øªâ€ŒÙ‡Ø§ÛŒ Ø¹Ù…Ù„ÛŒ Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù¾Ø±ÙˆÚ˜Ù‡ØŒ Ø³Ø±ØªÛŒÙÛŒÚ©ØªØŒ Ø§Ù†ØªØ±Ù†Ø´ÛŒÙ¾ Ùˆ ÛŒØ§Ø¯Ú¯ÛŒØ±ÛŒ Ù…Ø¯Ø§ÙˆÙ….'],['03','Ù…Ø§Ø³ØªØ±ÛŒ','Ø§Ø¯Ø§Ù…Ù‡ ØªØ­ØµÛŒÙ„ Ù¾ÛŒØ´Ø±ÙØªÙ‡ Ùˆ Ø§ÛŒØ¬Ø§Ø¯ ØªØ®ØµØµ Ø¹Ù…ÛŒÙ‚â€ŒØªØ± Ø¯Ø± ÛŒÚ© Ø¨Ø®Ø´ Ø¢ÛŒÙ†Ø¯Ù‡ IT.']],
+    resumeTitle: 'Ø±Ø²ÙˆÙ…Ù‡', resumeSub: 'Ù†Ù…Ø§ÛŒ Ú©ÙˆØªØ§Ù‡ Ø§Ø² Ù…Ø³ÛŒØ± ØªØ­ØµÛŒÙ„ÛŒØŒ Ù¾Ø§ÛŒÙ‡ ØªØ®Ù†ÛŒÚ©ÛŒ Ùˆ Ú©Ø§Ø±Ù‡Ø§ÛŒ Ø¹Ù…Ù„ÛŒ Ù…Ù†.', contactTitle: 'Ø¨ÛŒØ§ÛŒÛŒØ¯ Ú†ÛŒØ²ÛŒ Ø¨Ø§Ø§Ø±Ø²Ø´ Ø¨Ø³Ø§Ø²ÛŒÙ….', contactText: 'Ø¨Ø±Ø§ÛŒ ÙØ±ØµØªâ€ŒÙ‡Ø§ÛŒ Ø¨ÙˆØ±Ø³ÛŒÙ‡ØŒ ØªØ­ØµÛŒÙ„ØŒ Ø§Ù†ØªØ±Ù†Ø´ÛŒÙ¾ ÛŒØ§ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…ÛŒâ€ŒØªÙˆØ§Ù†ÛŒØ¯ Ø§Ø² Ø·Ø±ÛŒÙ‚ Ù¾Ø±ÙˆÙØ§ÛŒÙ„â€ŒÙ‡Ø§ÛŒ Ù…Ù† ØªÙ…Ø§Ø³ Ø¨Ú¯ÛŒØ±ÛŒØ¯.', email: 'Ø§ÛŒÙ…ÛŒÙ„', github: 'Ú¯ÛŒØªâ€ŒÙ‡Ø§Ø¨', linkedin: 'Ù„ÛŒÙ†Ú©Ø¯ÛŒÙ†', send: 'Ø§Ø±Ø³Ø§Ù„ Ù¾ÛŒØ§Ù…', nameLabel: 'Ù†Ø§Ù…', emailLabel: 'Ø§ÛŒÙ…ÛŒÙ„', messageLabel: 'Ù¾ÛŒØ§Ù…', namePh: 'Ù†Ø§Ù… Ø´Ù…Ø§', emailPh: 'you@example.com', messagePh: 'Ø¯Ø±Ø¨Ø§Ø±Ù‡ ÙØ±ØµØª Ø¨Ø±Ø§ÛŒÙ… Ø¨Ù†ÙˆÛŒØ³ÛŒØ¯â€¦', footer: 'Ø³ÛŒØ¯ Ø­Ø´Ù…Øª Ú©Ø±ÛŒÙ…ÛŒ Â· Ù…Ø­ØµÙ„ ØªÚ©Ù†Ø§Ù„ÙˆÚ˜ÛŒ Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÛŒ', back: 'Ø¨Ø§Ø²Ú¯Ø´Øª Ø¨Ù‡ Ø¨Ø§Ù„Ø§', language: 'English', menu: 'Ù…Ù†Ùˆ'
+  }
+};
+
+function Layout({lang,setLang,children}){
+  const t=content[lang], loc=useLocation();
+  const [open,setOpen]=useState(false);
+  useEffect(()=>{setOpen(false); window.scrollTo({top:0,behavior:'smooth'});},[loc.pathname]);
+  useEffect(()=>{document.documentElement.dir=lang==='fa'?'rtl':'ltr';document.documentElement.lang=lang==='fa'?'fa':'en';},[lang]);
+  return <div className={lang==='fa'?'app rtl':'app'}>
+    <header className="siteHeader">
+      <div className="container navWrap">
+        <Link to="/" className="brand"><span className="brandMark"><span>SK</span><i/></span><span><b>SAYED HASHMAT KARIMI</b><small>{t.role}</small></span></Link>
+        <nav className={open?'nav show':'nav'}>{t.nav.map(([p,l])=><Link key={p} className={loc.pathname===p?'active':''} to={p}>{l}</Link>)}</nav>
+        <div className="navActions"><button className="langBtn" onClick={()=>setLang(lang==='en'?'fa':'en')}><Languages size={15}/><span>{t.language}</span></button><button className="mobile" aria-label={t.menu} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></div>
+      </div>
+    </header>
+    <main>{children}</main>
+    <footer className="footer"><div className="container footerGrid"><div><div className="footerName">Sayed Hashmat Karimi</div><p>{t.role}</p></div><div className="footerLinks">{t.nav.slice(0,5).map(([p,l])=><Link key={p} to={p}>{l}</Link>)}</div><div className="footerSocial"><a href="https://github.com/hashmat-cyber" target="_blank" rel="noreferrer"><Github/></a><a href="https://www.linkedin.com/in/sayed-hashmat-karimi-5463ab416" target="_blank" rel="noreferrer"><Linkedin/></a><a href="mailto:sayedhashmatkarimi75@gmail.com"><Mail/></a></div></div><div className="container footerBottom"><span>Â© 2026 Sayed Hashmat Karimi</span><span>Information Technology Â· {t.back}</span></div></footer>
+  </div>
+}
+
+function PageHero({num,title,sub}){return <section className="pageHero"><div className="container"><div className="sectionEyebrow"><span>{num}</span><i/> INFORMATION TECHNOLOGY</div><h1>{title}</h1><p>{sub}</p></div></section>}
+function GlassCard({children,className=''}){return <div className={`glassCard ${className}`}>{children}</div>}
+
+function Home({t}){const nav=useNavigate();return <>
+  <section className="homeHero"><div className="heroGrid"/><div className="heroGlow glowA"/><div className="heroGlow glowB"/><div className="container heroLayout">
+    <div className="heroCopy"><div className="heroKicker"><span className="pulseDot"/>{t.heroKicker}</div><h1><span>SAYED HASHMAT</span> <em>KARIMI</em></h1><div className="roleLine"><span>{t.role}</span><i/><span>IT Â· 2026</span></div><h2>{t.heroTitle}</h2><p>{t.heroText}</p><div className="heroActions"><button className="btn btnPrimary" onClick={()=>nav('/projects')}>{t.explore}<ArrowRight/></button><button className="btn btnGlass" onClick={()=>nav('/resume')}>{t.resume}<ArrowUpRight/></button><button className="btn btnText" onClick={()=>nav('/contact')}>{t.about}<ChevronRight/></button></div><div className="heroStats">{t.stats.map(([v,l])=><div className="stat" key={l}><strong>{v}</strong><span>{l}</span></div>)}</div></div>
+    <div className="heroVisual"><div className="orbital orb1"/><div className="orbital orb2"/><div className="visualFrame"><div className="frameTop"><span><CircleDot/> LIVE PROFILE</span><span>01 / 04</span></div><div className="profileFallback"><img src="/assets/images/profile/profile.jpg" alt="Sayed Hashmat Karimi" /><div className="scanline"/></div><div className="profileCaption"><div><span>IDENTITY</span><b>SAYED HASHMAT KARIMI</b></div><div><span>FIELD</span><b>INFORMATION TECHNOLOGY</b></div></div></div><div className="techChip chip1"><Network/><span>NETWORK</span></div><div className="techChip chip2"><Database/><span>DATABASE</span></div><div className="techChip chip3"><Code2/><span>PYTHON</span></div><div className="terminalMini"><span>&gt;_ learning.mode</span><b>BUILD Â· TEST Â· IMPROVE</b></div></div>
+  </div></section>
+  <section className="marquee"><div className="container marqueeInner">{t.chips.map((x,i)=><span key={x}><Zap/> {x} <i>Â·</i></span>)}<span><Sparkles/> PRACTICAL IT</span></div></section>
+  <section className="section homeBento"><div className="container bentoIntro"><div><span className="sectionEyebrow">01 <i/> PROFILE</span><h2>{t.aboutTitle}</h2></div><p>{t.aboutText}</p></div><div className="container bentoGrid"><GlassCard className="bentoLarge"><span className="cardIndex">01</span><div className="bigIcon"><Cpu/></div><span className="eyebrowSmall">IDENTITY</span><h3>{t.role}</h3><p>{t.aboutText}</p><Link to="/about" className="cardLink">{t.about}<ArrowUpRight/></Link></GlassCard><GlassCard className="bentoFocus"><span className="eyebrowSmall">CURRENT FOCUS</span><div className="focusRows">{t.focus.slice(0,4).map((x,i)=><div key={x}><b>0{i+1}</b><span>{x}</span><CheckCircle2/></div>)}</div></GlassCard><GlassCard className="bentoMetric"><span className="eyebrowSmall">ACADEMIC SIGNAL</span><strong>90%</strong><p>Three-year average</p><div className="metricLine"><i/></div></GlassCard><GlassCard className="bentoMetric second"><span className="eyebrowSmall">PROJECT MINDSET</span><strong>03</strong><p>Practical IT projects</p><div className="nodeMap"><i/><i/><i/><i/></div></GlassCard></div></section>
+</>}
+
+function About({t}){return <><PageHero num="01" title={t.aboutTitle} sub={t.aboutText}/><section className="section"><div className="container aboutBento"><GlassCard className="aboutIdentity"><div className="aboutAvatar"><img src="/assets/images/profile/profile.jpg" alt="Sayed Hashmat Karimi" /></div><span className="eyebrowSmall">PERSONAL IDENTITY</span><h2>Sayed Hashmat Karimi</h2><p>{t.role}</p><div className="identityTags"><span>Afghanistan</span><span>IT</span><span>2026</span></div></GlassCard><GlassCard className="aboutStory"><span className="eyebrowSmall">MY APPROACH</span><h2>{t.aboutTitle}</h2><p>{t.aboutText}</p><div className="principles"><div><Layers3/><b>Learn</b><span>Independent study</span></div><div><Code2/><b>Build</b><span>Practical projects</span></div><div><Target/><b>Improve</b><span>Continuous growth</span></div></div></GlassCard><GlassCard className="aboutFocus"><span className="eyebrowSmall">WHAT I FOCUS ON</span>{t.focus.map((x,i)=><div className="focusItem" key={x}><span>0{i+1}</span><b>{x}</b><CheckCircle2/></div>)}</GlassCard></div></section></>}
+
+function Education({t}){return <><PageHero num="02" title={t.eduTitle} sub={t.eduSub}/><section className="section"><div className="container"><GlassCard className="performance"><div><span className="eyebrowSmall">{t.performance}</span><strong>90%</strong><p>three-year average</p></div><div className="progressTrack"><i/></div><div className="performanceSide"><strong>92%</strong><span>highest grade</span></div></GlassCard><div className="timeline">{t.journey.map((j,i)=><div className="timelineItem" key={i}><div className="timeLabel">{j[0]}</div><div className="timelineRail"><span/><i/></div><GlassCard className="timeCard"><span className="eyebrowSmall">ACADEMIC JOURNEY</span><h3>{j[1]}</h3><p>{j[2]}</p></GlassCard></div>)}</div><div className="highlights"><div><span className="sectionEyebrow">03 <i/> HIGHLIGHTS</span><h2>{t.highTitle}</h2></div><div className="highlightGrid">{t.high.map((x,i)=><GlassCard key={x}><Award/><b>0{i+1}</b><span>{x}</span></GlassCard>)}</div></div></div></section></>}
+
+function Skills({t}){return <><PageHero num="03" title={t.skillsTitle} sub={t.skillsSub}/><section className="section"><div className="container skillGrid">{t.skills.map(([n,l,d,I,p],i)=><GlassCard className={`skillCard s${i+1}`} key={n}><div className="skillHead"><div className="skillIcon"><I/></div><span>{l}</span></div><span className="cardIndex">0{i+1}</span><h3>{n}</h3><p>{d}</p><div className="skillViz"><div className="skillDots"><i/><i/><i/><i/><i/></div><div className="miniBar"><i style={{width:p}}/></div><b>{p}</b></div></GlassCard>)}</div></section></>}
+
+function Certificates({t}){
+  return (
+    <>
+      <PageHero
+        num="04"
+        title={t.certTitle}
+        sub={t.certSub}
+      />
+
+      <section className="section">
+        <div className="container certificateGrid">
+
+          {t.certs.map(([n,o,d,url,img,pdf],i)=>(
+            <GlassCard
+              className="certificate"
+              key={n}
+            >
+
+              <div className="certificateVisual">
+
+                {img ? (
+                  <img
+                    src={img}
+                    alt={`${n} certificate`}
+                    className="certificateImage"
+                  />
+                ) : (
+                  <Award/>
+                )}
+
+                {!img && (
+                  <div className="seal">
+                    CERTIFIED
+                  </div>
+                )}
+
+                {!img && (
+                  <span>
+                    0{i+1}
+                  </span>
+                )}
+
+              </div>
+
+              <div className="certificateBody">
+
+                <span className="eyebrowSmall">
+                  {o}
+                </span>
+
+                <h3>{n}</h3>
+
+                <p>{d}</p>
+
+                <div className="certMeta">
+
+                  <span>ACADEMIC</span>
+
+                  <div className="certActions">
+
+                    {pdf && (
+                      <a
+                        href={pdf}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="viewCert"
+                      >
+                        VIEW CERTIFICATE
+                        <ArrowUpRight/>
+                      </a>
+                    )}
+
+                    {url ? (
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="verifyCert"
+                      >
+                        VERIFY
+                        <ArrowUpRight/>
+                      </a>
+                    ) : (
+                      <CheckCircle2/>
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </GlassCard>
+          ))}
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Projects({t}){
+  const projectImages = [
+    '/assets/projects/it-help-desk-dashboard.jpg.png',
+    '/assets/projects/network-monitoring-dashboard.jpg.png',
+    '/assets/projects/student-information-database.jpg.png'
+  ];
+
+  return (
+    <>
+      <PageHero
+        num="05"
+        title={t.projTitle}
+        sub={t.projSub}
+      />
+
+      <section className="section">
+        <div className="container projectShowcase">
+
+          {t.projects.map(([n,tags,d,git,demo],i)=>(
+            <GlassCard
+              className={`projectCard project${i+1}`}
+              key={n}
+            >
+
+              <div className="projectMeta">
+                <span>0{i+1}</span>
+                <span>IT PROJECT</span>
+              </div>
+
+              <div className="projectInfo">
+                <span className="eyebrowSmall">
+                  {tags}
+                </span>
+
+                <h2>{n}</h2>
+
+                <p>{d}</p>
+
+                <div className="projectLinks">
+                  <a
+                    href={git}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Github/>
+                    GitHub
+                    <ArrowUpRight/>
+                  </a>
+
+                  <a
+                    href={demo}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Globe2/>
+                    Live Demo
+                    <ArrowUpRight/>
+                  </a>
+                </div>
+              </div>
+
+              <div className="projectMock projectScreenshot">
+                <img
+                  src={projectImages[i]}
+                  alt={`${n} dashboard screenshot`}
+                />
+              </div>
+
+            </GlassCard>
+          ))}
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Achievements({t}){
+  const achievements = [
+    {
+      number: '01',
+      title: 'First Rank ? Grade 11',
+      year: '2025',
+      image: '/assets/achievements/grade-11-first-rank.jpg',
+      description: 'Awarded for achieving first place in Grade 11 for outstanding academic performance, commitment to learning, discipline, and consistent academic excellence.',
+      details: [
+        ['Achievement', 'First place in Grade 11'],
+        ['Academic Year', '2025'],
+        ['Issue Date', '25 December 2025'],
+        ['Certificate No.', 'SCH-2025-312'],
+        ['Issued by', 'Qabilbay High School'],
+        ['Recognition', 'Outstanding Academic Achievement']
+      ]
+    },
+    {
+      number: '02',
+      title: 'Successful Completion of Grade 12 First Four-Month Examination',
+      year: '2026',
+      image: '/assets/achievements/grade-12-first-four-month-exam.jpg',
+      description: 'Awarded for successfully completing the first four-month examination of Grade 12, demonstrating academic performance, commitment, discipline, and perseverance.',
+      details: [
+        ['Grade', '12'],
+        ['Academic Year', '2026'],
+        ['Achievement', 'Successful completion of first four-month examination'],
+        ['Issued by', 'Qabilbay High School'],
+        ['Principal', 'Sayed Ghulam Hanafi'],
+        ['Class Teacher', 'Mohammad Shaker Frotan']
+      ]
+    }
+  ];
+
+  return (
+    <>
+      <PageHero
+        num="06"
+        title={t.achTitle}
+        sub={t.achSub}
+      />
+
+      <section className="section achievementsSection">
+        <div className="container">
+
+          <div className="achievementsIntro">
+            <div>
+              <span className="eyebrowSmall">ACADEMIC ACHIEVEMENTS</span>
+              <h2>2025?2026</h2>
+              <p>Learning ? Building ? Improving</p>
+            </div>
+
+            <Trophy className="achievementsTrophy"/>
+          </div>
+
+          <div className="achievementsGrid">
+
+            {achievements.map((achievement) => (
+              <GlassCard
+                className="achievementCard"
+                key={achievement.title}
+              >
+
+                <div className="achievementCardHeader">
+                  <span className="achievementNumber">
+                    {achievement.number}
+                  </span>
+
+                  <span className="achievementYear">
+                    {achievement.year}
+                  </span>
+
+                  <CheckCircle2/>
+                </div>
+
+                <div className="achievementImageWrap">
+                  <img
+                    src={achievement.image}
+                    alt={achievement.title}
+                    className="achievementImage"
+                  />
+                </div>
+
+                <div className="achievementContent">
+
+                  <h3>{achievement.title}</h3>
+
+                  <p className="achievementDescription">
+                    {achievement.description}
+                  </p>
+
+                  <div className="achievementDetails">
+                    {achievement.details.map(([label, value]) => (
+                      <div
+                        className="achievementDetail"
+                        key={label}
+                      >
+                        <span>{label}</span>
+                        <strong>{value}</strong>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+
+              </GlassCard>
+            ))}
+
+          </div>
+
+        </div>
+      </section>
+    </>
+  );
+}
+function Goals({t}){return <><PageHero num="07" title={t.goalsTitle} sub={t.goalsSub}/><section className="section darkSection"><div className="container goalList">{t.goals.map(g=><div className="goal" key={g[0]}><span>{g[0]}</span><div className="goalLine"><i/></div><div><span className="eyebrowSmall">ROADMAP</span><h2>{g[1]}</h2><p>{g[2]}</p></div><Target/></div>)}</div></section></>}
+
+function Resume({t}){return <><PageHero num="08" title={t.resumeTitle} sub={t.resumeSub}/><section className="section"><div className="container resumeGrid"><GlassCard className="resumeMain"><div className="resumeHeader"><div><span className="eyebrowSmall">PROFILE</span><h2>Sayed Hashmat Karimi</h2><p>{t.role}</p></div><div className="resumeCode">SK<br/><span>IT</span></div></div><div className="resumeRows"><div><GraduationCap/><span>Education</span><b>Qabilbay School Â· 2026</b></div><div><Code2/><span>Technical focus</span><b>Python Â· Web Â· Networking Â· Databases</b></div><div><Award/><span>Credentials</span><b>CS50x Â· CS50P Â· CS50 SQL Â· ICDL</b></div><div><Layers3/><span>Projects</span><b>3 practical IT projects</b></div></div><button className="btn btnPrimary resumeBtn"><Download/>Download Resume</button></GlassCard><GlassCard className="resumeSide"><span className="eyebrowSmall">CORE SIGNALS</span><div className="signal"><strong>90%</strong><span>Academic average</span></div><div className="signal"><strong>03</strong><span>Featured projects</span></div><div className="signal"><strong>04+</strong><span>Technical credentials</span></div></GlassCard></div></section></>}
+
+function Contact({t}){
+  const [sent,setSent] = useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+    setSent(true);
+  };
+
+  return (
+    <>
+      <PageHero
+        num="09"
+        title={t.contactTitle}
+        sub={t.contactText}
+      />
+
+      <section className="section">
+        <div className="container contactGrid">
+
+          <GlassCard className="contactIntro">
+            <span className="eyebrowSmall">
+              OPEN TO OPPORTUNITIES
+            </span>
+
+            <h2>{t.contactTitle}</h2>
+
+            <p>{t.contactText}</p>
+
+            <div className="contactLinks">
+
+              <a href="mailto:sayedhashmatkarimi75@gmail.com">
+                <Mail/>
+
+                <div>
+                  <span>{t.email}</span>
+                  <b>sayedhashmatkarimi75@gmail.com</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+              <a
+                href="https://github.com/hashmat-cyber"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Github/>
+
+                <div>
+                  <span>{t.github}</span>
+                  <b>github.com/hashmat-cyber</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/sayed-hashmat-karimi-5463ab416"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Linkedin/>
+
+                <div>
+                  <span>{t.linkedin}</span>
+                  <b>linkedin.com/in/sayed-hashmat-karimi-5463ab416</b>
+                </div>
+
+                <ArrowUpRight/>
+              </a>
+
+            </div>
+          </GlassCard>
+
+
+          <GlassCard className="contactForm">
+
+            <div className="formTitle">
+              <Terminal/>
+              <span>MESSAGE TERMINAL</span>
+            </div>
+
+            <form onSubmit={submit}>
+
+              <label>
+                {t.nameLabel}
+
+                <input
+                  required
+                  placeholder={t.namePh}
+                />
+              </label>
+
+              <label>
+                {t.emailLabel}
+
+                <input
+                  required
+                  type="email"
+                  placeholder={t.emailPh}
+                />
+              </label>
+
+              <label>
+                {t.messageLabel}
+
+                <textarea
+                  required
+                  placeholder={t.messagePh}
+                />
+              </label>
+
+              <button
+                className="btn btnPrimary"
+                type="submit"
+              >
+                <Send/>
+                {t.send}
+              </button>
+
+              {sent && (
+                <div className="success">
+                  <CheckCircle2/>
+                  Message ready. Thank you for contacting me.
+                </div>
+              )}
+
+            </form>
+
+          </GlassCard>
+
+        </div>
+      </section>
+    </>
+  );
+}
+function App(){const [lang,setLang]=useState('en');const t=content[lang];return <Layout lang={lang} setLang={setLang}><Routes><Route path="/" element={<Home t={t}/>}/><Route path="/about" element={<About t={t}/>}/><Route path="/education" element={<Education t={t}/>}/><Route path="/skills" element={<Skills t={t}/>}/><Route path="/certificates" element={<Certificates t={t}/>}/><Route path="/projects" element={<Projects t={t}/>}/><Route path="/achievements" element={<Achievements t={t}/>}/><Route path="/goals" element={<Goals t={t}/>}/><Route path="/resume" element={<Resume t={t}/>}/><Route path="/contact" element={<Contact t={t}/>}/><Route path="*" element={<Home t={t}/>}/></Routes></Layout>}
+createRoot(document.getElementById('root')).render(<BrowserRouter><App/></BrowserRouter>);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
