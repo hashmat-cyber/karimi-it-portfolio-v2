@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -15,16 +15,16 @@ const content = {
     role: 'Information Technology Student',
     heroKicker: 'PERSONAL DIGITAL LABORATORY · IT',
     heroTitle: 'Building my future through Information Technology.',
-    heroText: 'I explore practical computing, programming, networking, databases, web technologies and digital problem solving — learning by building and improving.',
+    heroText: 'I explore practical computing, programming, networking, databases, web technologies and digital problem solving â€” learning by building and improving.',
     explore: 'Explore Projects', resume: 'View Resume', about: 'About Me',
-    stats: [['90%','Overall School Result'],['2014–2026','Academic journey'],['IT','Future direction']],
+    stats: [['90%','Overall School Result'],['2014â€“2026','Academic journey'],['IT','Future direction']],
     chips: ['Python','Networking','Databases','Web Development'],
     aboutTitle: 'A practical learner with a clear direction.',
     aboutText: 'My interest in Information Technology started at school, where I became interested in computers and how technology can solve everyday problems. Since then, I have continued learning through independent study, online courses and practical projects. I have built my foundation in programming, networking, databases, web technologies and computer systems by learning through practice.',
     focusTitle: 'What I focus on',
-    focus: ['Computer Systems & IT Support — Windows, Linux, system setup and technical troubleshooting','Networking & Network Monitoring — IP networking, device monitoring, status checks and troubleshooting','Python & Flask Development — Python programming, Flask web applications and practical automation','SQL & Database Management — SQL, structured data and student information management','Web Applications & Practical Projects — Building real IT projects such as Help Desk, Network Monitoring and Student Database systems'],
+    focus: ['Computer Systems & IT Support â€” Windows, Linux, system setup and technical troubleshooting','Networking & Network Monitoring â€” IP networking, device monitoring, status checks and troubleshooting','Python & Flask Development â€” Python programming, Flask web applications and practical automation','SQL & Database Management â€” SQL, structured data and student information management','Web Applications & Practical Projects â€” Building real IT projects such as Help Desk, Network Monitoring and Student Database systems'],
     eduTitle: 'Education', eduSub: 'From my school years to my planned university journey.', performance: 'Academic performance',
-    journey: [['2014','Education begins','The start of my long academic journey.'],['2024','Grade 10','83% academic result.'],['2025','Grade 11','Academic year completed successfully.'],['2026','Grade 12 completion','Overall school result: 90% out of 100.'],['Next','Bachelor’s in Information Technology','Planned university direction.'],['Future','Master’s degree','Advanced academic and professional development.']],
+    journey: [['2014','Education begins','The start of my long academic journey.'],['2024','Grade 10','83% academic result.'],['2025','Grade 11','Academic year completed successfully.'],['2026','Grade 12 completion','Overall school result: 90% out of 100.'],["Next","Bachelor's in Information Technology","Planned university direction."],["Future","Master's degree","Advanced academic and professional development."]],
     highTitle: 'Academic highlights', high: ['Overall school result: 90% out of 100','Top student in class','Four first-rank school certificates','Recognition for helping classmates learn computer skills'],
     skillsTitle: 'IT Skills', skillsSub: 'A growing technical toolkit built through study and projects.', skills: [
   ['Python', 'Intermediate', 'Programming fundamentals, scripting and problem-solving logic', Code2, '45%'],
@@ -46,7 +46,8 @@ const content = {
   ['CS50P','Harvard / CS50','Introduction to Programming with Python','https://cs50.harvard.edu/certificates/590f0885-92c1-4263-9f8c-feb76327671a','/assets/certificates/CS50P.jpg','/assets/certificates/CS50P.pdf'],
   ['CS50 SQL','Harvard / CS50','SQL and database fundamentals'],
   ['ICDL','Digital Skills','Computer and productivity skills'],
-  ['English Certificates','Academic','English language learning and development'],
+  ['Let’s Go Three','English / Let’s Go','English language learning and development','', '/assets/certificates/English-Lets-Go-Three.jpg.jpg'],
+  ['Let’s Go Two','English / Let’s Go','English language learning and development','', '/assets/certificates/English-Lets-Go-Two.jpg.jpg'],
   ['School Recognition','Qabilbay School','Academic and technology-related recognition'],
   ['Diploma','Mofaker Noori Educational Center','Diploma awarded for successfully completing the required academic program.','', '/assets/certificates/Mofaker-Noori-Diploma.jpg'],
   ['Certificate','Mofaker Noori Educational Center','Certificate awarded in recognition of talent, moral character, effort and competency.','', '/assets/certificates/Mofaker-Noori-Certificate.jpg']
@@ -58,9 +59,9 @@ const content = {
       ['Karimi Network Monitoring Dashboard','Networking · Flask · Python','A monitoring dashboard for devices, status checks, alerts, scanning and network reporting.','https://github.com/hashmat-cyber/Karimi-Network-Monitoring-Dashboard','https://karimi-network-monitoring-dashboard.onrender.com'],
       ['Karimi Student Information Database','Database · Python · Web','A structured student information project designed to demonstrate database organization and practical information management.','https://github.com/hashmat-cyber/Karimi-Student-Information-Database','https://karimi-student-information-database.onrender.com']
     ],
-    goalsTitle: 'Academic & Career Goals', goalsSub: 'A simple roadmap with long-term direction.', goals: [['01','Bachelor’s in Information Technology','Build strong foundations in systems, networking, databases, software and modern digital technologies.'],['02','Professional Development','Strengthen my practical skills through projects, certifications, internships and continuous learning.'],['03','Master’s Degree','Continue advanced study and develop deeper expertise in a future IT specialization.']],
+    goalsTitle: 'Academic & Career Goals', goalsSub: 'A simple roadmap with long-term direction.', goals: [["01","Bachelor's in Information Technology","Build strong foundations in systems, networking, databases, software and modern digital technologies."],['02','Professional Development','Strengthen my practical skills through projects, certifications, internships and continuous learning.'],["03","Master's Degree","Continue advanced study and develop deeper expertise in a future IT specialization."]],
     resumeTitle: 'Resume', resumeSub: 'A concise view of my academic direction, technical foundation and practical work.',
-    contactTitle: 'Let’s build something meaningful.', contactText: 'For scholarship, academic, internship or technology opportunities, you can reach me through my professional profiles.', email: 'Email', github: 'GitHub', linkedin: 'LinkedIn', send: 'Send message', nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePh: 'Your name', emailPh: 'you@example.com', messagePh: 'Tell me about the opportunity…',
+    contactTitle: "Let's build something meaningful.", contactText: 'For scholarship, academic, internship or technology opportunities, you can reach me through my professional profiles.', email: 'Email', github: 'GitHub', linkedin: 'LinkedIn', send: 'Send message', nameLabel: 'Name', emailLabel: 'Email', messageLabel: 'Message', namePh: 'Your name', emailPh: 'you@example.com', messagePh: 'Tell me about the opportunity…',
     footer: 'Sayed Hashmat Karimi · Information Technology Student', back: 'Back to top', language: 'Dari', menu: 'Menu'
   }
 };
@@ -179,8 +180,227 @@ function Home({t}){const nav=useNavigate();return <>
 
 function About({t}){return <><PageHero num="01" title={t.aboutTitle} sub={t.aboutText}/><section className="section"><div className="container aboutBento"><GlassCard className="aboutIdentity"><div className="aboutAvatar"><img src="/assets/images/profile/profile.jpg" alt="Sayed Hashmat Karimi" /></div><span className="eyebrowSmall">PERSONAL IDENTITY</span><h2>Sayed Hashmat Karimi</h2><p>{t.role}</p><div className="identityTags"><span>Qabilbay School</span><span>IT</span><span>2026</span></div></GlassCard><GlassCard className="aboutStory"><span className="eyebrowSmall">MY APPROACH</span><h2>Learning by doing.</h2><p>I believe the best way to learn technology is by combining knowledge with practice. I learn through online courses, documentation and independent study, then apply what I learn by building projects and solving technical problems. Each project helps me understand my strengths, learn from mistakes and improve my skills.</p><div className="principles"><div><Layers3/><b>Learn</b><span>Independent study, courses and technical documentation</span></div><div><Code2/><b>Build</b><span>Real projects to turn knowledge into practical skills</span></div><div><Target/><b>Improve</b><span>Testing, troubleshooting and learning from mistakes</span></div></div></GlassCard><GlassCard className="aboutFocus"><span className="eyebrowSmall">WHAT I FOCUS ON</span>{t.focus.map((x,i)=><div className="focusItem" key={x}><span>0{i+1}</span><b>{x}</b><CheckCircle2/></div>)}</GlassCard></div></section></>}
 
-function Education({t}){return <><PageHero num="02" title={t.eduTitle} sub={t.eduSub}/><section className="section"><div className="container"><GlassCard className="performance"><div><span className="eyebrowSmall">{t.performance}</span><strong>90%</strong><p>Overall school result · 90 out of 100</p></div><div className="progressTrack"><i/></div><div className="performanceSide"><strong>100%</strong><span>full scale</span></div></GlassCard><div className="timeline">{t.journey.map((j,i)=><div className="timelineItem" key={i}><div className="timeLabel">{j[0]}</div><div className="timelineRail"><span/><i/></div><GlassCard className="timeCard"><span className="eyebrowSmall">ACADEMIC JOURNEY</span><h3>{j[1]}</h3><p>{j[2]}</p></GlassCard></div>)}</div><div className="highlights"><div><span className="sectionEyebrow">03 <i/> HIGHLIGHTS</span><h2>{t.highTitle}</h2></div><div className="highlightGrid">{t.high.map((x,i)=><GlassCard key={x}><Award/><b>0{i+1}</b><span>{x}</span></GlassCard>)}</div></div></div></section></>}
+function Education({t}){
+  const semesters = [
+    ["01", "20%", "77%", "97%"],
+    ["02", "18%", "80%", "98%"],
+    ["03", "18.5%", "71.25%", "89.75%"],
+    ["04", "16.5%", "62%", "78.5%"],
+    ["05", "19%", "78%", "97%"]
+  ];
 
+  return (
+    <>
+      <PageHero num="02" title={t.eduTitle} sub={t.eduSub}/>
+
+      <section className="section">
+        <div className="container">
+
+          <GlassCard className="performance">
+            <div>
+              <span className="eyebrowSmall">{t.performance}</span>
+              <strong>90%</strong>
+              <p>Overall school result · 90 out of 100</p>
+            </div>
+
+            <div className="progressTrack">
+              <i/>
+            </div>
+
+            <div className="performanceSide">
+              <strong>100%</strong>
+              <span>full scale</span>
+            </div>
+          </GlassCard>
+
+          <GlassCard className="academicPerformanceCard">
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              gap: "24px",
+              flexWrap: "wrap",
+              marginBottom: "24px"
+            }}>
+              <div>
+                <span className="eyebrowSmall">ACADEMIC PERFORMANCE</span>
+                <h2 style={{margin: "8px 0 6px"}}>Azeraksh Academic Center</h2>
+                <p style={{margin: 0}}>Tuition Transcript · 5 Semesters · 10 Months</p>
+              </div>
+
+              <div style={{textAlign: "right"}}>
+                <span className="eyebrowSmall">OVERALL SEMESTER AVERAGE</span>
+                <strong style={{
+                  display: "block",
+                  fontSize: "clamp(2.4rem, 6vw, 4.5rem)",
+                  lineHeight: 1,
+                  marginTop: "8px"
+                }}>92.05%</strong>
+              </div>
+            </div>
+
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+              gap: "12px",
+              marginBottom: "22px"
+            }}>
+              <div className="glassMiniCard">
+                <span className="eyebrowSmall">HIGHEST</span>
+                <strong>98%</strong>
+              </div>
+
+              <div className="glassMiniCard">
+                <span className="eyebrowSmall">LOWEST</span>
+                <strong>78.5%</strong>
+              </div>
+
+              <div className="glassMiniCard">
+                <span className="eyebrowSmall">ASSESSMENT</span>
+                <strong>20% + 80%</strong>
+              </div>
+
+              <div className="glassMiniCard">
+                <span className="eyebrowSmall">PERIOD</span>
+                <strong>10 Months</strong>
+              </div>
+            </div>
+
+            <div style={{overflowX: "auto", marginTop: "10px"}}>
+              <table style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                minWidth: "560px"
+              }}>
+                <thead>
+                  <tr>
+                    <th style={{textAlign: "left", padding: "12px 10px"}}>Semester</th>
+                    <th style={{textAlign: "left", padding: "12px 10px"}}>Mid Term</th>
+                    <th style={{textAlign: "left", padding: "12px 10px"}}>Final</th>
+                    <th style={{textAlign: "left", padding: "12px 10px"}}>Total</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {semesters.map(([semester, mid, final, total]) => (
+                    <tr key={semester}>
+                      <td style={{padding: "12px 10px"}}>Semester {semester}</td>
+                      <td style={{padding: "12px 10px"}}>{mid}</td>
+                      <td style={{padding: "12px 10px"}}>{final}</td>
+                      <td style={{padding: "12px 10px", fontWeight: 700}}>{total}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{
+              marginTop: "20px",
+              paddingTop: "18px",
+              borderTop: "1px solid rgba(255,255,255,.08)"
+            }}>
+              <span className="eyebrowSmall">ASSESSMENT WEIGHTING</span>
+              <p style={{margin: "7px 0 0"}}>Mid Term 20% · Final 80% · Total 100%</p>
+            </div>
+          </GlassCard>
+
+          <div style={{marginTop: "28px"}}>
+            <div style={{marginBottom: "18px"}}>
+              <span className="sectionEyebrow">ACADEMIC RECORD</span>
+              <h2 style={{marginTop: "8px"}}>Original Tuition Transcript</h2>
+              <p>Original transcript pages for academic verification.</p>
+            </div>
+
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "18px"
+            }}>
+              <a
+                href="/assets/academic/azeraksh-transcript-2%20(1).jpg"
+                target="_blank"
+                rel="noreferrer"
+                style={{display: "block"}}
+              >
+                <GlassCard>
+                  <img
+                    src="/assets/academic/azeraksh-transcript-2%20(1).jpg"
+                    alt="Azeraksh Tuition Transcript page 1"
+                    style={{
+                      width: "100%",
+                      display: "block",
+                      borderRadius: "12px"
+                    }}
+                  />
+                  <span className="eyebrowSmall" style={{display: "block", marginTop: "12px"}}>
+                    TRANSCRIPT PAGE 01
+                  </span>
+                </GlassCard>
+              </a>
+
+              <a
+                href="/assets/academic/azeraksh-transcript-2%20(2).jpg"
+                target="_blank"
+                rel="noreferrer"
+                style={{display: "block"}}
+              >
+                <GlassCard>
+                  <img
+                    src="/assets/academic/azeraksh-transcript-2%20(2).jpg"
+                    alt="Azeraksh Tuition Transcript page 2"
+                    style={{
+                      width: "100%",
+                      display: "block",
+                      borderRadius: "12px"
+                    }}
+                  />
+                  <span className="eyebrowSmall" style={{display: "block", marginTop: "12px"}}>
+                    TRANSCRIPT PAGE 02
+                  </span>
+                </GlassCard>
+              </a>
+            </div>
+          </div>
+
+          <div className="timeline">
+            {t.journey.map((j,i)=>(
+              <div className="timelineItem" key={i}>
+                <div className="timeLabel">{j[0]}</div>
+                <div className="timelineRail">
+                  <span/>
+                  <i/>
+                </div>
+                <GlassCard className="timeCard">
+                  <span className="eyebrowSmall">ACADEMIC JOURNEY</span>
+                  <h3>{j[1]}</h3>
+                  <p>{j[2]}</p>
+                </GlassCard>
+              </div>
+            ))}
+          </div>
+
+          <div className="highlights">
+            <div>
+              <span className="sectionEyebrow">03 <i/> HIGHLIGHTS</span>
+              <h2>{t.highTitle}</h2>
+            </div>
+
+            <div className="highlightGrid">
+              {t.high.map((x,i)=>(
+                <GlassCard key={x}>
+                  <Award/>
+                  <b>0{i+1}</b>
+                  <span>{x}</span>
+                </GlassCard>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </>
+  );
+}
 function Skills({t}){return <><PageHero num="03" title={t.skillsTitle} sub={t.skillsSub}/><section className="section"><div className="container skillGrid">{t.skills.map(([n,l,d,I,p],i)=><GlassCard className={`skillCard s${i+1}`} key={n}><div className="skillHead"><div className="skillIcon"><I/></div><span>{l}</span></div><span className="cardIndex">0{i+1}</span><h3>{n}</h3><p>{d}</p><div className="skillViz"><div className="skillDots"><i/><i/><i/><i/><i/></div><div className="miniBar"><i style={{width:p}}/></div><b>{p}</b></div></GlassCard>)}</div></section></>}
 
 function Certificates({t}){
@@ -363,7 +583,7 @@ function Achievements({t}){
   const achievements = [
     {
       number: '01',
-      title: 'First Rank — Grade 11',
+      title: 'First Rank â€” Grade 11',
       year: '2025',
       image: '/assets/achievements/grade-11-first-rank.jpg',
       description: 'Awarded for achieving first place in Grade 11 for outstanding academic performance, commitment to learning, discipline, and consistent academic excellence.',
@@ -407,7 +627,7 @@ function Achievements({t}){
           <div className="achievementsIntro">
             <div>
               <span className="eyebrowSmall">ACADEMIC ACHIEVEMENTS</span>
-              <h2>2025–2026</h2>
+              <h2>2025â€“2026</h2>
               <p>Learning · Building · Improving</p>
             </div>
 
@@ -616,6 +836,19 @@ function Contact({t}){
 }
 function App(){const t=content.en;return <Layout><Routes><Route path="/" element={<Home t={t}/>}/><Route path="/about" element={<About t={t}/>}/><Route path="/education" element={<Education t={t}/>}/><Route path="/skills" element={<Skills t={t}/>}/><Route path="/certificates" element={<Certificates t={t}/>}/><Route path="/projects" element={<Projects t={t}/>}/><Route path="/achievements" element={<Achievements t={t}/>}/><Route path="/goals" element={<Goals t={t}/>}/><Route path="/resume" element={<Resume t={t}/>}/><Route path="/contact" element={<Contact t={t}/>}/><Route path="*" element={<Home t={t}/>}/></Routes></Layout>}
 createRoot(document.getElementById('root')).render(<BrowserRouter><App/></BrowserRouter>);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
