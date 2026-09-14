@@ -321,14 +321,14 @@ function Education({t}){
               gap: "18px"
             }}>
               <a
-                href="/assets/academic/azeraksh-transcript-2%20(1).jpg"
+                href="/assets/academic/azeraksh-transcript-2%20(2).jpg"
                 target="_blank"
                 rel="noreferrer"
                 style={{display: "block"}}
               >
                 <GlassCard>
                   <img
-                    src="/assets/academic/azeraksh-transcript-2%20(1).jpg"
+                    src="/assets/academic/azeraksh-transcript-2%20(2).jpg"
                     alt="Azeraksh Tuition Transcript page 1"
                     style={{
                       width: "100%",
@@ -352,14 +352,14 @@ function Education({t}){
               </a>
 
               <a
-                href="/assets/academic/azeraksh-transcript-2%20(2).jpg"
+                href="/assets/academic/azeraksh-transcript-2%20(1).jpg"
                 target="_blank"
                 rel="noreferrer"
                 style={{display: "block"}}
               >
                 <GlassCard>
                   <img
-                    src="/assets/academic/azeraksh-transcript-2%20(2).jpg"
+                    src="/assets/academic/azeraksh-transcript-2%20(1).jpg"
                     alt="Azeraksh Tuition Transcript page 2"
                     style={{
                       width: "100%",
