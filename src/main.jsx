@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -15,14 +15,14 @@ const content = {
     role: 'Information Technology Student',
     heroKicker: 'PERSONAL DIGITAL LABORATORY · IT',
     heroTitle: 'Building my future through Information Technology.',
-    heroText: 'I explore practical computing, programming, networking, databases, web technologies and digital problem solving â€” learning by building and improving.',
+    heroText: 'I explore practical computing, programming, networking, databases, web technologies and digital problem solving — learning by building and improving.',
     explore: 'Explore Projects', resume: 'View Resume', about: 'About Me',
-    stats: [['90%','Overall School Result'],['2014â€“2026','Academic journey'],['IT','Future direction']],
+    stats: [['90%','Overall School Result'],['2014–2026','Academic journey'],['IT','Future direction']],
     chips: ['Python','Networking','Databases','Web Development'],
     aboutTitle: 'A practical learner with a clear direction.',
     aboutText: 'My interest in Information Technology started at school, where I became interested in computers and how technology can solve everyday problems. Since then, I have continued learning through independent study, online courses and practical projects. I have built my foundation in programming, networking, databases, web technologies and computer systems by learning through practice.',
     focusTitle: 'What I focus on',
-    focus: ['Computer Systems & IT Support â€” Windows, Linux, system setup and technical troubleshooting','Networking & Network Monitoring â€” IP networking, device monitoring, status checks and troubleshooting','Python & Flask Development â€” Python programming, Flask web applications and practical automation','SQL & Database Management â€” SQL, structured data and student information management','Web Applications & Practical Projects â€” Building real IT projects such as Help Desk, Network Monitoring and Student Database systems'],
+    focus: ['Computer Systems & IT Support — Windows, Linux, system setup and technical troubleshooting','Networking & Network Monitoring — IP networking, device monitoring, status checks and troubleshooting','Python & Flask Development — Python programming, Flask web applications and practical automation','SQL & Database Management — SQL, structured data and student information management','Web Applications & Practical Projects — Building real IT projects such as Help Desk, Network Monitoring and Student Database systems'],
     eduTitle: 'Education', eduSub: 'From my school years to my planned university journey.', performance: 'Academic performance',
     journey: [['2014','Education begins','The start of my long academic journey.'],['2024','Grade 10','83% academic result.'],['2025','Grade 11','Academic year completed successfully.'],['2026','Grade 12 completion','Overall school result: 90% out of 100.'],["Next","Bachelor's in Information Technology","Planned university direction."],["Future","Master's degree","Advanced academic and professional development."]],
     highTitle: 'Academic highlights', high: ['Overall school result: 90% out of 100','Top student in class','Four first-rank school certificates','Recognition for helping classmates learn computer skills'],
@@ -266,32 +266,36 @@ function Education({t}){
               </div>
             </div>
 
-            <div style={{overflowX: "auto", marginTop: "10px"}}>
-              <table style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                minWidth: "560px"
-              }}>
-                <thead>
-                  <tr>
-                    <th style={{textAlign: "left", padding: "12px 10px"}}>Semester</th>
-                    <th style={{textAlign: "left", padding: "12px 10px"}}>Mid Term</th>
-                    <th style={{textAlign: "left", padding: "12px 10px"}}>Final</th>
-                    <th style={{textAlign: "left", padding: "12px 10px"}}>Total</th>
-                  </tr>
-                </thead>
+            <div style={{marginTop: "24px"}}>
+              <div className="semesterGrid">
+                {semesters.map(([semester, midTerm, final, total]) => (
+                  <div className="semesterCard" key={semester}>
+                    <div className="semesterCardHeader">
+                      <span className="semesterNumber">SEMESTER {semester}</span>
+                      <span className="semesterTotal">{total}</span>
+                    </div>
 
-                <tbody>
-                  {semesters.map(([semester, mid, final, total]) => (
-                    <tr key={semester}>
-                      <td style={{padding: "12px 10px"}}>Semester {semester}</td>
-                      <td style={{padding: "12px 10px"}}>{mid}</td>
-                      <td style={{padding: "12px 10px"}}>{final}</td>
-                      <td style={{padding: "12px 10px", fontWeight: 700}}>{total}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                    <div className="semesterDivider" />
+
+                    <div className="semesterScores">
+                      <div className="semesterScore">
+                        <span className="scoreLabel">MID TERM</span>
+                        <strong>{midTerm}</strong>
+                      </div>
+
+                      <div className="semesterScore">
+                        <span className="scoreLabel">FINAL</span>
+                        <strong>{final}</strong>
+                      </div>
+
+                      <div className="semesterScore totalScore">
+                        <span className="scoreLabel">TOTAL</span>
+                        <strong>{total}</strong>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div style={{
@@ -332,9 +336,18 @@ function Education({t}){
                       borderRadius: "12px"
                     }}
                   />
-                  <span className="eyebrowSmall" style={{display: "block", marginTop: "12px"}}>
-                    TRANSCRIPT PAGE 01
-                  </span>
+                  <div className="transcript-caption">
+                    <div className="transcript-caption-header">
+                      <span className="transcript-caption-icon">▣</span>
+                      <span className="transcript-caption-label">TRANSCRIPT PAGE 01</span>
+                    </div>
+                  <div className="transcript-caption-title">
+                    Azeraksh Tuition Transcript
+                  </div>
+                  <div className="transcript-caption-description">
+                    Original academic transcript · Page 1
+                  </div>
+                  </div>
                 </GlassCard>
               </a>
 
@@ -354,9 +367,18 @@ function Education({t}){
                       borderRadius: "12px"
                     }}
                   />
-                  <span className="eyebrowSmall" style={{display: "block", marginTop: "12px"}}>
-                    TRANSCRIPT PAGE 02
-                  </span>
+                  <div className="transcript-caption">
+                    <div className="transcript-caption-header">
+                      <span className="transcript-caption-icon">▣</span>
+                      <span className="transcript-caption-label">TRANSCRIPT PAGE 02</span>
+                    </div>
+                  <div className="transcript-caption-title">
+                    Azeraksh Tuition Transcript
+                  </div>
+                  <div className="transcript-caption-description">
+                    Original academic transcript · Page 2
+                  </div>
+                  </div>
                 </GlassCard>
               </a>
             </div>
@@ -583,7 +605,7 @@ function Achievements({t}){
   const achievements = [
     {
       number: '01',
-      title: 'First Rank â€” Grade 11',
+      title: 'First Rank — Grade 11',
       year: '2025',
       image: '/assets/achievements/grade-11-first-rank.jpg',
       description: 'Awarded for achieving first place in Grade 11 for outstanding academic performance, commitment to learning, discipline, and consistent academic excellence.',
@@ -627,7 +649,7 @@ function Achievements({t}){
           <div className="achievementsIntro">
             <div>
               <span className="eyebrowSmall">ACADEMIC ACHIEVEMENTS</span>
-              <h2>2025â€“2026</h2>
+              <h2>2025–2026</h2>
               <p>Learning · Building · Improving</p>
             </div>
 
